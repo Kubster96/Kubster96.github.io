@@ -238,7 +238,8 @@ img {
     left: 0;
     right: 0;
     background-color: var(--color-white);
-    padding: 0 var(--spacing-md);
+    padding: 0;
+    margin: 0;
     gap: 0;
     border-top: 1px solid var(--color-border);
     box-shadow: var(--shadow-lg);
@@ -252,34 +253,35 @@ img {
   .navbar-nav li {
     list-style: none;
     width: 100%;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .navbar-nav li:last-child {
+    border-bottom: none;
   }
 
   .navbar-nav .nav-link {
     display: block;
-    padding: var(--spacing-md) 0;
+    padding: var(--spacing-md) var(--spacing-lg);
     width: 100%;
     font-size: var(--font-size-base);
     font-weight: 500;
     color: var(--color-text);
-    border-bottom: 1px solid var(--color-border);
     border-radius: 0;
-    transition: color var(--transition-fast);
+    background: none;
+    transition: color var(--transition-fast), background var(--transition-fast);
   }
 
   .navbar-nav .nav-link:hover {
     color: var(--color-primary);
+    background: var(--color-background);
     text-decoration: none;
-    background: none;
   }
 
   .navbar-nav .nav-link.active {
     color: var(--color-primary);
     font-weight: 600;
-    background: none;
-  }
-
-  .navbar-nav li:last-child .nav-link {
-    border-bottom: none;
+    background: var(--color-primary-light);
   }
 }
 
