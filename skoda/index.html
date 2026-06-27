@@ -71,6 +71,8 @@
   input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{
     width:100%;font-family:Inter,sans-serif;font-size:16px;color:var(--ink);background:#fff;
     border:1px solid var(--line);border-radius:9px;padding:11px 12px;margin-top:8px}
+  /* iOS renders date/time inputs at an intrinsic width that ignores width:100% and overflows the card */
+  input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;min-width:0;max-width:100%}
   input:focus,textarea:focus,select:focus{outline:2px solid var(--green);border-color:var(--green)}
   textarea{resize:vertical;min-height:48px}
   .note{margin-top:8px}
