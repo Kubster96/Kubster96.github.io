@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#16191D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Oględziny Superb">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Oględziny — Škoda Superb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F2EFE9; --paper-2:#FBFAF6; --ink:#16191D; --ink-soft:#4A4F57;
+    --line:#D9D3C7; --green:#15573C; --green-d:#0E3F2B; --amber:#D9851F; --red:#B23A2E;
+    --shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 24px -16px rgba(0,0,0,.25);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5;
+    padding-bottom:calc(104px + env(safe-area-inset-bottom));}
+  .wrap{max-width:760px;margin:0 auto;padding:0 16px}
+
+  header{background:var(--ink);color:var(--paper-2);padding:max(22px,env(safe-area-inset-top)) 0 18px}
+  .eyebrow{font-family:Oswald;letter-spacing:.18em;text-transform:uppercase;font-size:12px;color:#9FB6A8;font-weight:600}
+  h1{font-family:Oswald;font-weight:700;font-size:clamp(23px,6vw,34px);margin:4px 0 2px;letter-spacing:.01em;line-height:1.05}
+  h1 span{color:#7FD1A6}
+  .sub{color:#B9BDC2;font-size:13px}
+  .odo{margin-top:14px;background:#0c0e11;border:1px solid #2a2f36;border-radius:10px;padding:11px 13px;
+    display:flex;gap:10px 14px;flex-wrap:wrap;align-items:center}
+  .odo .step{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:#cfd3d8}
+  .odo .step b{color:#7FD1A6;font-weight:700}
+  .odo .arrow{color:#5a6068}
+  .odo .q{color:var(--amber)}
+
+  .ref{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:16px 0 6px;box-shadow:var(--shadow)}
+  .ref h2{font-family:Oswald;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px;color:var(--green-d)}
+  .ref dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:13px}
+  .ref dt{color:var(--ink-soft)}
+  .ref dd{margin:0;font-weight:600;font-family:"JetBrains Mono",monospace;font-size:12.5px}
+
+  section{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:16px 16px 6px;margin:14px 0;box-shadow:var(--shadow)}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin:0 0 10px}
+  .num{font-family:Oswald;font-weight:700;color:var(--green);font-size:14px;border:1.5px solid var(--green);border-radius:6px;padding:1px 7px;flex:none}
+  .sec-head h3{font-family:Oswald;font-weight:600;font-size:18px;margin:0;letter-spacing:.01em}
+  .sec-note{font-size:12.5px;color:var(--ink-soft);margin:-4px 0 12px}
+
+  .field{padding:12px 0;border-top:1px dashed var(--line)}
+  .field:first-of-type{border-top:0}
+  .q-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+  .label{font-weight:500;font-size:14.5px;flex:1 1 220px}
+  .hint{display:block;font-weight:400;font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex:none;background:#fff}
+  .seg label{font-family:Oswald;font-size:13px;letter-spacing:.03em;text-transform:uppercase;
+    padding:10px 13px;min-height:42px;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;color:var(--ink-soft);user-select:none;border-left:1px solid var(--line);-webkit-tap-highlight-color:transparent}
+  .seg label:first-of-type{border-left:0}
+  .seg input{position:absolute;opacity:0;width:0;height:0}
+  .seg input:checked+label[data-v="OK"]{background:var(--green);color:#fff}
+  .seg input:checked+label[data-v="Uwaga"]{background:var(--amber);color:#fff}
+  .seg input:checked+label[data-v="Źle"]{background:var(--red);color:#fff}
+  .seg input:focus-visible+label{outline:2px solid var(--green);outline-offset:-2px}
+
+  input[type=text],input[type=number],input[type=date],input[type=time],textarea,select{
+    width:100%;font-family:Inter,sans-serif;font-size:16px;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:9px;padding:11px 12px;margin-top:8px}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--green);border-color:var(--green)}
+  textarea{resize:vertical;min-height:48px}
+  .note{margin-top:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .mini{font-size:12px;color:var(--ink-soft);margin:2px 0 0;font-weight:500}
+
+  .ask{background:#F4F1E8;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+  .ask .qq{font-weight:600;font-size:14px;color:var(--green-d)}
+
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(22,25,29,.97);backdrop-filter:blur(6px);
+    border-top:1px solid #2a2f36;padding:12px 0 calc(12px + env(safe-area-inset-bottom));z-index:20}
+  .bar .wrap{display:flex;gap:12px;align-items:center;justify-content:space-between}
+  .bar .meta{color:#cfd3d8;font-size:12px;font-family:"JetBrains Mono",monospace;flex:1 1 auto}
+  .btn{font-family:Oswald;font-weight:600;font-size:15px;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--green);color:#fff;border:0;border-radius:10px;padding:13px 20px;cursor:pointer;flex:none;min-height:46px}
+  .btn:hover{background:var(--green-d)}
+  .btn:focus-visible{outline:3px solid #7FD1A6;outline-offset:2px}
+
+  #result{display:none;margin:14px 0}
+  #result.show{display:block}
+  .flags{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--paper-2);box-shadow:var(--shadow)}
+  .flags h3{font-family:Oswald;margin:0;padding:13px 16px;font-size:16px;background:var(--ink);color:#fff;letter-spacing:.02em}
+  .flags ul{margin:0;padding:10px 16px 14px;list-style:none}
+  .flags li{padding:8px 0;border-top:1px dashed var(--line);font-size:14px;display:flex;gap:9px}
+  .flags li:first-child{border-top:0}
+  .dot{flex:none;width:9px;height:9px;border-radius:50%;margin-top:6px}
+  .dot.red{background:var(--red)}.dot.amber{background:var(--amber)}.dot.green{background:var(--green)}
+
+  .tools{display:flex;justify-content:center;margin:18px 0 4px}
+  .clearbtn{background:none;border:1px solid var(--line);color:var(--ink-soft);font-size:13px;
+    padding:9px 16px;border-radius:9px;cursor:pointer;font-family:Inter,sans-serif}
+  .clearbtn:hover{border-color:var(--red);color:var(--red)}
+  .foot{font-size:12px;color:var(--ink-soft);text-align:center;margin:12px 0 8px}
+
+  @media (max-width:560px){
+    .q-row{flex-direction:column;align-items:stretch}
+    .seg{display:flex;width:100%}
+    .seg label{flex:1}
+    .grid3{grid-template-columns:1fr 1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Checklista oględzin · na miejscu</div>
+    <h1>Škoda Superb 2.0&nbsp;TDI <span>Style</span> · 2022</h1>
+    <div class="sub">Diesel 200&nbsp;KM · DSG · FWD · cena 97&nbsp;000&nbsp;zł · VIN&nbsp;…N7051812</div>
+    <div class="odo">
+      <span class="step">09.2022 <b>42&nbsp;325</b></span><span class="arrow">→</span>
+      <span class="step">12.2025 <b>46&nbsp;089</b></span><span class="arrow">→</span>
+      <span class="step q">dziś licznik musi być ≥ 46&nbsp;089&nbsp;km</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="ref">
+    <h2>Co już wiemy — zweryfikuj na aucie</h2>
+    <dl>
+      <dt>VIN (dowód + nadwozie)</dt><dd>TMBJR7NP7N7051812</dd>
+      <dt>Nr rej.</dt><dd>GD3F491 (pomorskie)</dd>
+      <dt>Ostatni urzędowy licznik</dt><dd>46 089 km · 05.12.2025</dd>
+      <dt>Deklarowany w ogłoszeniu</dt><dd>≈ 49 800 km</dd>
+      <dt>Badanie ważne do</dt><dd>29.09.2027</dd>
+      <dt>Właściciele</dt><dd>salon → firma (~1 rok) → osoba</dd>
+      <dt>Felgi wg VIN</dt><dd>17" TRITON (215/55 R17)</dd>
+      <dt>Lakier wg VIN</dt><dd>perłowy Black Magic</dd>
+      <dt>Średnia rynkowa</dt><dd>105 972 zł</dd>
+    </dl>
+  </div>
+
+  <form id="form">
+
+  <section data-title="Dane spotkania">
+    <div class="sec-head"><span class="num">00</span><h3>Dane spotkania</h3></div>
+    <div class="field" data-label="Data oględzin">
+      <div class="grid3">
+        <input type="date" data-tag="data">
+        <input type="time" data-tag="godzina">
+        <input type="text" data-tag="miejscowość" placeholder="Miejscowość">
+      </div>
+    </div>
+    <div class="field" data-label="Sprzedawca (imię / telefon)"><input type="text" placeholder="np. Marek, 600-000-000"></div>
+    <div class="field" data-label="Cena wywoławcza dziś (zł)"><input type="number" inputmode="numeric" data-tag="cena_wywoławcza" placeholder="97000"></div>
+  </section>
+
+  <section data-title="1. Tożsamość auta i dokumenty">
+    <div class="sec-head"><span class="num">01</span><h3>Tożsamość i dokumenty</h3></div>
+    <p class="sec-note">Najpierw papiery — żeby raporty (CEPiK / carVertical) dotyczyły TEGO egzemplarza.</p>
+    <div class="field" data-label="VIN na nadwoziu = VIN w dowodzie = …N7051812">
+      <div class="q-row"><span class="label">VIN zgadza się w 3 miejscach (szyba/słupek, dowód, raport)<span class="hint">Tabliczka pod maską i za szybą.</span></span>
+        <span class="seg"><input type="radio" name="vin" id="vin1" value="OK"><label for="vin1" data-v="OK">OK</label><input type="radio" name="vin" id="vin2" value="Uwaga"><label for="vin2" data-v="Uwaga">Uwaga</label><input type="radio" name="vin" id="vin3" value="Źle"><label for="vin3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Nr rejestracyjny zgodny (GD3F491)">
+      <div class="q-row"><span class="label">Tablice i dowód zgodne</span>
+        <span class="seg"><input type="radio" name="rej" id="rej1" value="OK"><label for="rej1" data-v="OK">OK</label><input type="radio" name="rej" id="rej2" value="Uwaga"><label for="rej2" data-v="Uwaga">Uwaga</label><input type="radio" name="rej" id="rej3" value="Źle"><label for="rej3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Dowód rejestracyjny + polisa OC na miejscu">
+      <div class="q-row"><span class="label">Dokumenty fizycznie obecne i aktualne</span>
+        <span class="seg"><input type="radio" name="doc" id="doc1" value="OK"><label for="doc1" data-v="OK">OK</label><input type="radio" name="doc" id="doc2" value="Uwaga"><label for="doc2" data-v="Uwaga">Uwaga</label><input type="radio" name="doc" id="doc3" value="Źle"><label for="doc3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Liczba kluczyków">
+      <div class="q-row"><span class="label">Ile kompletów kluczy? (najlepiej 2)</span>
+        <span class="seg"><input type="radio" name="klucze" id="kl1" value="2 lub więcej"><label for="kl1" data-v="OK">2+</label><input type="radio" name="klucze" id="kl2" value="1"><label for="kl2" data-v="Uwaga">1</label></span></div>
+    </div>
+    <div class="field" data-label="Sprzedaje właściciel z dowodu?">
+      <div class="q-row"><span class="label">Osoba sprzedająca = właściciel w dowodzie (lub pełnomocnictwo)</span>
+        <span class="seg"><input type="radio" name="wlasc" id="w1" value="OK"><label for="w1" data-v="OK">Tak</label><input type="radio" name="wlasc" id="w2" value="Uwaga"><label for="w2" data-v="Uwaga">Pełn.</label><input type="radio" name="wlasc" id="w3" value="Źle"><label for="w3" data-v="Źle">Nie</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Notatka (komis, sprzedaż w imieniu znajomego…)"></textarea>
+    </div>
+  </section>
+
+  <section data-title="2. Licznik i przebieg">
+    <div class="sec-head"><span class="num">02</span><h3>Licznik i przebieg</h3></div>
+    <p class="sec-note">Najważniejsza rzecz — cała atrakcyjność ceny stoi na niskim przebiegu.</p>
+    <div class="field" data-label="ODCZYT LICZNIKA z auta (km)">
+      <div class="q-row"><span class="label">Wpisz dokładny stan licznika<span class="hint">Musi być ≥ 46 089 km. Oczekiwane ≈ 49–52 tys.</span></span></div>
+      <input type="number" inputmode="numeric" id="odoInput" data-tag="licznik_km" placeholder="np. 50120">
+    </div>
+    <div class="field" data-label="Spójność z historią (42 325 → 46 089 → dziś)">
+      <div class="q-row"><span class="label">Licznik rośnie logicznie względem raportów</span>
+        <span class="seg"><input type="radio" name="odospan" id="os1" value="OK"><label for="os1" data-v="OK">OK</label><input type="radio" name="odospan" id="os2" value="Uwaga"><label for="os2" data-v="Uwaga">Uwaga</label><input type="radio" name="odospan" id="os3" value="Źle"><label for="os3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Ślady manipulacji licznikiem / deską">
+      <div class="q-row"><span class="label">Brak śladów demontażu zegarów, rys wokół deski</span>
+        <span class="seg"><input type="radio" name="manip" id="m1" value="OK"><label for="m1" data-v="OK">Brak</label><input type="radio" name="manip" id="m2" value="Uwaga"><label for="m2" data-v="Uwaga">Uwaga</label><input type="radio" name="manip" id="m3" value="Źle"><label for="m3" data-v="Źle">Są</label></span></div>
+    </div>
+    <div class="field" data-label="Zużycie a przebieg (kierownica, fotel, pedały)">
+      <div class="q-row"><span class="label">Stopień zużycia pasuje do ~50 tys. km<span class="hint">Wytarte elementy przy 50 tys. = sygnał ostrzegawczy.</span></span>
+        <span class="seg"><input type="radio" name="zuzycie" id="z1" value="OK"><label for="z1" data-v="OK">Pasuje</label><input type="radio" name="zuzycie" id="z2" value="Uwaga"><label for="z2" data-v="Uwaga">Uwaga</label><input type="radio" name="zuzycie" id="z3" value="Źle"><label for="z3" data-v="Źle">Za duże</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Co wygląda na zużyte / świeże?"></textarea>
+    </div>
+  </section>
+
+  <section data-title="3. Silnik 2.0 TDI (zimny rozruch!)">
+    <div class="sec-head"><span class="num">03</span><h3>Silnik 2.0 TDI</h3></div>
+    <p class="sec-note">Przyjedź, gdy silnik jest ZIMNY — sprzedawca nie powinien go wcześniej rozgrzewać.</p>
+    <div class="field" data-label="Silnik był zimny przy rozruchu?">
+      <div class="q-row"><span class="label">Maska/silnik zimne na start</span>
+        <span class="seg"><input type="radio" name="zimny" id="zi1" value="OK"><label for="zi1" data-v="OK">Tak</label><input type="radio" name="zimny" id="zi2" value="Źle"><label for="zi2" data-v="Źle">Już ciepły</label></span></div>
+    </div>
+    <div class="field" data-label="Rozruch i praca na zimno (równo, bez stuków)">
+      <div class="q-row"><span class="label">Odpala od razu, równa praca, bez kołatania</span>
+        <span class="seg"><input type="radio" name="praca" id="p1" value="OK"><label for="p1" data-v="OK">OK</label><input type="radio" name="praca" id="p2" value="Uwaga"><label for="p2" data-v="Uwaga">Uwaga</label><input type="radio" name="praca" id="p3" value="Źle"><label for="p3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Dym z wydechu (zimny i po gazie)">
+      <div class="q-row"><span class="label">Brak siwego/czarnego/niebieskiego dymu</span>
+        <span class="seg"><input type="radio" name="dym" id="d1" value="OK"><label for="d1" data-v="OK">Czysto</label><input type="radio" name="dym" id="d2" value="Uwaga"><label for="d2" data-v="Uwaga">Lekki</label><input type="radio" name="dym" id="d3" value="Źle"><label for="d3" data-v="Źle">Mocny</label></span></div>
+    </div>
+    <div class="field" data-label="Kontrolki (check, DPF, AdBlue, świece)">
+      <div class="q-row"><span class="label">Po rozgrzaniu brak świecących kontrolek błędów</span>
+        <span class="seg"><input type="radio" name="kontrolki" id="k1" value="OK"><label for="k1" data-v="OK">Brak</label><input type="radio" name="kontrolki" id="k2" value="Uwaga"><label for="k2" data-v="Uwaga">Uwaga</label><input type="radio" name="kontrolki" id="k3" value="Źle"><label for="k3" data-v="Źle">Świecą</label></span></div>
+    </div>
+    <div class="field" data-label="Wycieki / poziom oleju / płyny pod maską">
+      <div class="q-row"><span class="label">Sucho pod spodem, olej na poziomie, płyn czysty</span>
+        <span class="seg"><input type="radio" name="plyny" id="pl1" value="OK"><label for="pl1" data-v="OK">OK</label><input type="radio" name="plyny" id="pl2" value="Uwaga"><label for="pl2" data-v="Uwaga">Uwaga</label><input type="radio" name="plyny" id="pl3" value="Źle"><label for="pl3" data-v="Źle">Źle</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Wycieki? poziom AdBlue? data wymiany oleju z naklejki?"></textarea>
+    </div>
+  </section>
+
+  <section data-title="4. Skrzynia DSG (DQ381, 7-bieg)">
+    <div class="sec-head"><span class="num">04</span><h3>Skrzynia DSG</h3></div>
+    <p class="sec-note">Mokra DSG DQ381 — wymaga wymiany oleju (~co 60 tys.). Uważaj na ruszanie i bardzo wolną jazdę.</p>
+    <div class="field" data-label="Ruszanie i jazda 5–20 km/h (korki)">
+      <div class="q-row"><span class="label">Płynnie, bez szarpania/kopania/wibracji sprzęgła</span>
+        <span class="seg"><input type="radio" name="dsg1" id="dg1" value="OK"><label for="dg1" data-v="OK">OK</label><input type="radio" name="dsg1" id="dg2" value="Uwaga"><label for="dg2" data-v="Uwaga">Uwaga</label><input type="radio" name="dsg1" id="dg3" value="Źle"><label for="dg3" data-v="Źle">Szarpie</label></span></div>
+    </div>
+    <div class="field" data-label="Zmiana biegów / kickdown">
+      <div class="q-row"><span class="label">Szybkie, gładkie zmiany; reakcja na gaz</span>
+        <span class="seg"><input type="radio" name="dsg2" id="dh1" value="OK"><label for="dh1" data-v="OK">OK</label><input type="radio" name="dsg2" id="dh2" value="Uwaga"><label for="dh2" data-v="Uwaga">Uwaga</label><input type="radio" name="dsg2" id="dh3" value="Źle"><label for="dh3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Czy był serwis oleju DSG? (zapytaj + faktura)">
+      <div class="q-row"><span class="label">Potwierdzona wymiana oleju w skrzyni</span>
+        <span class="seg"><input type="radio" name="dsg3" id="dj1" value="OK"><label for="dj1" data-v="OK">Tak</label><input type="radio" name="dsg3" id="dj2" value="Uwaga"><label for="dj2" data-v="Uwaga">Nie wie</label><input type="radio" name="dsg3" id="dj3" value="Źle"><label for="dj3" data-v="Źle">Nie</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Data/przebieg wymiany oleju DSG, jeśli podał"></textarea>
+    </div>
+  </section>
+
+  <section data-title="5. Zawieszenie, hamulce, opony">
+    <div class="sec-head"><span class="num">05</span><h3>Zawieszenie · hamulce · opony</h3></div>
+    <div class="field" data-label="Zawieszenie (stuki na progach)">
+      <div class="q-row"><span class="label">Cicho, bez stuków/klekotów, dobre tłumienie</span>
+        <span class="seg"><input type="radio" name="zaw" id="zw1" value="OK"><label for="zw1" data-v="OK">OK</label><input type="radio" name="zaw" id="zw2" value="Uwaga"><label for="zw2" data-v="Uwaga">Uwaga</label><input type="radio" name="zaw" id="zw3" value="Źle"><label for="zw3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Hamulce (tarcze/klocki, równe hamowanie)">
+      <div class="q-row"><span class="label">Brak bicia, pisków, ściągania</span>
+        <span class="seg"><input type="radio" name="ham" id="hm1" value="OK"><label for="hm1" data-v="OK">OK</label><input type="radio" name="ham" id="hm2" value="Uwaga"><label for="hm2" data-v="Uwaga">Uwaga</label><input type="radio" name="ham" id="hm3" value="Źle"><label for="hm3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Opony — rozmiar / DOT / zużycie">
+      <div class="grid2"><input type="text" data-tag="rozmiar_opon" placeholder="Rozmiar (215/55 R17?)"><input type="text" data-tag="DOT_rok" placeholder="DOT / rok opon"></div>
+      <textarea class="note" data-tag="notatka" placeholder="Równe zużycie? komplet zima+lato? bieżnik?"></textarea>
+    </div>
+  </section>
+
+  <section data-title="6. Nadwozie i lakier">
+    <div class="sec-head"><span class="num">06</span><h3>Nadwozie i lakier</h3></div>
+    <p class="sec-note">Najlepiej z grubościomierzem. Fabryka ≈ 90–150 µm. &gt; ~200 µm = prawdopodobne lakierowanie/szpachla.</p>
+    <div class="field" data-label="Grubość lakieru (µm) — wpisz pomiary">
+      <p class="mini">Maska / Dach / Klapa / Drzwi L / Drzwi P / Błotniki</p>
+      <div class="grid3">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_maska" placeholder="maska">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_dach" placeholder="dach">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_klapa" placeholder="klapa">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_drzwi_L" placeholder="drzwi L">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_drzwi_P" placeholder="drzwi P">
+        <input type="number" inputmode="numeric" class="paint" data-tag="µm_błotniki" placeholder="błotniki">
+      </div>
+    </div>
+    <div class="field" data-label="Równość szczelin / pasowanie elementów">
+      <div class="q-row"><span class="label">Równe odstępy maski, drzwi, klapy</span>
+        <span class="seg"><input type="radio" name="szczel" id="sc1" value="OK"><label for="sc1" data-v="OK">OK</label><input type="radio" name="szczel" id="sc2" value="Uwaga"><label for="sc2" data-v="Uwaga">Uwaga</label><input type="radio" name="szczel" id="sc3" value="Źle"><label for="sc3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Korozja / spawy / dno i progi">
+      <div class="q-row"><span class="label">Brak rdzy, oryginalne spawy, czyste progi</span>
+        <span class="seg"><input type="radio" name="koroz" id="ko1" value="OK"><label for="ko1" data-v="OK">OK</label><input type="radio" name="koroz" id="ko2" value="Uwaga"><label for="ko2" data-v="Uwaga">Uwaga</label><input type="radio" name="koroz" id="ko3" value="Źle"><label for="ko3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Zgodność lakieru i felg ze specyfikacją">
+      <div class="q-row"><span class="label">Lakier perłowy + felgi 17" zgodne z VIN<span class="hint">W ogłoszeniu było „metalik"/16".</span></span>
+        <span class="seg"><input type="radio" name="spec" id="sp1" value="OK"><label for="sp1" data-v="OK">Zgodne</label><input type="radio" name="spec" id="sp2" value="Uwaga"><label for="sp2" data-v="Uwaga">Różni się</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Co się różni? (rozmiar felg, rodzaj lakieru)"></textarea>
+    </div>
+  </section>
+
+  <section data-title="7. Wnętrze i elektronika">
+    <div class="sec-head"><span class="num">07</span><h3>Wnętrze i elektronika</h3></div>
+    <p class="sec-note">Przejdź po wyposażeniu z raportu — wszystko ma działać.</p>
+    <div class="field" data-label="Klimatyzacja 3-strefy (chłodzi i grzeje)">
+      <div class="q-row"><span class="label">Climatronic działa we wszystkich strefach</span>
+        <span class="seg"><input type="radio" name="klima" id="cl1" value="OK"><label for="cl1" data-v="OK">OK</label><input type="radio" name="klima" id="cl2" value="Uwaga"><label for="cl2" data-v="Uwaga">Uwaga</label><input type="radio" name="klima" id="cl3" value="Źle"><label for="cl3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Kamera cofania + czujniki + Front Assist">
+      <div class="q-row"><span class="label">Kamera, czujniki przód/tył, asystenci działają</span>
+        <span class="seg"><input type="radio" name="kam" id="ka1" value="OK"><label for="ka1" data-v="OK">OK</label><input type="radio" name="kam" id="ka2" value="Uwaga"><label for="ka2" data-v="Uwaga">Uwaga</label><input type="radio" name="kam" id="ka3" value="Źle"><label for="ka3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Fotele podgrzewane/elektryczne, Virtual Cockpit">
+      <div class="q-row"><span class="label">Grzanie foteli, regulacje el., zegary cyfrowe OK</span>
+        <span class="seg"><input type="radio" name="fot" id="fo1" value="OK"><label for="fo1" data-v="OK">OK</label><input type="radio" name="fot" id="fo2" value="Uwaga"><label for="fo2" data-v="Uwaga">Uwaga</label><input type="radio" name="fot" id="fo3" value="Źle"><label for="fo3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Multimedia / CarPlay / Android Auto / głośniki">
+      <div class="q-row"><span class="label">Ekran, łączność telefonu, nagłośnienie bez usterek</span>
+        <span class="seg"><input type="radio" name="mult" id="mu1" value="OK"><label for="mu1" data-v="OK">OK</label><input type="radio" name="mult" id="mu2" value="Uwaga"><label for="mu2" data-v="Uwaga">Uwaga</label><input type="radio" name="mult" id="mu3" value="Źle"><label for="mu3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Elektryczna klapa, szyby, lusterka, keyless">
+      <div class="q-row"><span class="label">Wszystkie funkcje el. działają</span>
+        <span class="seg"><input type="radio" name="elek" id="el1" value="OK"><label for="el1" data-v="OK">OK</label><input type="radio" name="elek" id="el2" value="Uwaga"><label for="el2" data-v="Uwaga">Uwaga</label><input type="radio" name="elek" id="el3" value="Źle"><label for="el3" data-v="Źle">Źle</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Co nie działa / grzechocze / brakuje?"></textarea>
+    </div>
+  </section>
+
+  <section data-title="8. Jazda próbna">
+    <div class="sec-head"><span class="num">08</span><h3>Jazda próbna</h3></div>
+    <p class="sec-note">Koniecznie miasto + wyższa prędkość (obwodnica). Min. 15–20 minut.</p>
+    <div class="field" data-label="Prowadzenie / brak ściągania">
+      <div class="q-row"><span class="label">Jedzie prosto, kierownica wyśrodkowana, bez drgań</span>
+        <span class="seg"><input type="radio" name="prow" id="pr1" value="OK"><label for="pr1" data-v="OK">OK</label><input type="radio" name="prow" id="pr2" value="Uwaga"><label for="pr2" data-v="Uwaga">Uwaga</label><input type="radio" name="prow" id="pr3" value="Źle"><label for="pr3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Przyspieszenie / moc / kultura na trasie">
+      <div class="q-row"><span class="label">Równo ciągnie, brak utraty mocy, temperatura stabilna</span>
+        <span class="seg"><input type="radio" name="moc" id="mc1" value="OK"><label for="mc1" data-v="OK">OK</label><input type="radio" name="moc" id="mc2" value="Uwaga"><label for="mc2" data-v="Uwaga">Uwaga</label><input type="radio" name="moc" id="mc3" value="Źle"><label for="mc3" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Hałasy (łożyska, stuki, gwizdy turbo)">
+      <div class="q-row"><span class="label">Brak buczenia łożysk, świstów, stuków</span>
+        <span class="seg"><input type="radio" name="halas" id="ha1" value="OK"><label for="ha1" data-v="OK">OK</label><input type="radio" name="halas" id="ha2" value="Uwaga"><label for="ha2" data-v="Uwaga">Uwaga</label><input type="radio" name="halas" id="ha3" value="Źle"><label for="ha3" data-v="Źle">Źle</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Wrażenia z jazdy, cokolwiek niepokojącego"></textarea>
+    </div>
+  </section>
+
+  <section data-title="9. Pytania do sprzedawcy">
+    <div class="sec-head"><span class="num">09</span><h3>Pytania do sprzedawcy</h3></div>
+    <p class="sec-note">Zadaj wprost i zanotuj odpowiedzi — to materiał do oceny wiarygodności.</p>
+    <div class="ask"><span class="qq">Dlaczego sprzedajesz i jak długo masz auto?</span></div>
+    <div class="field" data-label="Powód sprzedaży / okres posiadania"><textarea data-tag="odp" placeholder="Odpowiedź…"></textarea></div>
+    <div class="ask"><span class="qq">Kto jeździł wcześniej? (w CEPiK rok użytkowała firma)</span></div>
+    <div class="field" data-label="Historia użytkowania (firma/leasing?)"><textarea data-tag="odp" placeholder="Czy wie o schemacie salon → firma ~rok → osoba?"></textarea></div>
+    <div class="ask"><span class="qq">Jest pełna książka serwisowa i faktury? Serwis w ASO?</span></div>
+    <div class="field" data-label="Serwis / książka / faktury"><textarea data-tag="odp" placeholder="Interwał 30 tys./2 lata — czy trzymane?"></textarea></div>
+    <div class="ask"><span class="qq">Czy auto było lakierowane / miało stłuczki?</span></div>
+    <div class="field" data-label="Historia szkód / lakierowania"><textarea data-tag="odp" placeholder="Porównaj z grubościomierzem z sekcji 6"></textarea></div>
+    <div class="ask"><span class="qq">Co ostatnio wymieniane? Co wymaga wkrótce uwagi?</span></div>
+    <div class="field" data-label="Ostatnie naprawy / co przed nami"><textarea data-tag="odp" placeholder="Olej, rozrząd, DSG, opony, klocki…"></textarea></div>
+    <div class="ask"><span class="qq">Zgoda na przegląd na podnośniku w niezależnym serwisie?</span></div>
+    <div class="field" data-label="Zgoda na niezależny przegląd">
+      <div class="q-row"><span class="label">Sprzedawca się zgadza</span>
+        <span class="seg"><input type="radio" name="podn" id="pd1" value="OK"><label for="pd1" data-v="OK">Tak</label><input type="radio" name="podn" id="pd2" value="Uwaga"><label for="pd2" data-v="Uwaga">Niechętnie</label><input type="radio" name="podn" id="pd3" value="Źle"><label for="pd3" data-v="Źle">Nie</label></span></div>
+    </div>
+  </section>
+
+  <section data-title="10. Negocjacje i decyzja">
+    <div class="sec-head"><span class="num">10</span><h3>Negocjacje i decyzja</h3></div>
+    <div class="field" data-label="Cena po negocjacji (zł)">
+      <div class="grid2"><input type="number" inputmode="numeric" data-tag="cena_docelowa" placeholder="Twój cel (zł)"><input type="number" inputmode="numeric" data-tag="cena_uzyskana" placeholder="Uzgodniona (zł)"></div>
+      <p class="mini">Odniesienie: średnia rynkowa 105 972 zł · mediana FWD ~99 550 zł · ogłoszenie 97 000 zł.</p>
+    </div>
+    <div class="field" data-label="Ogólne wrażenie">
+      <div class="q-row"><span class="label">Jak auto wypadło ogółem?</span>
+        <span class="seg"><input type="radio" name="wraz" id="wr1" value="Bardzo dobre"><label for="wr1" data-v="OK">Dobre</label><input type="radio" name="wraz" id="wr2" value="Mieszane"><label for="wr2" data-v="Uwaga">Mieszane</label><input type="radio" name="wraz" id="wr3" value="Słabe"><label for="wr3" data-v="Źle">Słabe</label></span></div>
+    </div>
+    <div class="field" data-label="Wstępna decyzja">
+      <div class="q-row"><span class="label">Twoja pierwsza myśl</span>
+        <span class="seg"><input type="radio" name="dec" id="de1" value="Kupuję"><label for="de1" data-v="OK">Kupuję</label><input type="radio" name="dec" id="de2" value="Do przemyślenia"><label for="de2" data-v="Uwaga">Myślę</label><input type="radio" name="dec" id="de3" value="Odpuszczam"><label for="de3" data-v="Źle">Odpuszczam</label></span></div>
+    </div>
+    <div class="field" data-label="Notatki końcowe">
+      <textarea data-tag="podsumowanie" placeholder="Cokolwiek, co pomoże podjąć decyzję…" style="min-height:80px"></textarea>
+    </div>
+  </section>
+
+  </form>
+
+  <div id="result"><div class="flags"><h3>Podsumowanie — flagi</h3><ul id="flagList"></ul></div></div>
+
+  <div class="tools"><button type="button" class="clearbtn" id="clearBtn">Wyczyść formularz</button></div>
+  <p class="foot">Dane zapisują się automatycznie w tej przeglądarce. Wynik (.txt) wrzuć do rozmowy — przygotuję analizę „kupować czy nie".</p>
+</div>
+
+<div class="bar"><div class="wrap">
+  <span class="meta" id="barMeta">Wypełnij i pobierz raport</span>
+  <button class="btn" id="genBtn" type="button">Generuj plik .txt</button>
+</div></div>
+
+<script>
+(function(){
+  var OFFICIAL_ODO=46089, LISTING_ODO=49800, STORAGE_KEY='ogledziny-skoda-superb-v2';
+  function textFields(){return document.querySelectorAll('input[type=text],input[type=number],input[type=date],input[type=time],textarea');}
+
+  function saveState(){
+    try{
+      var s={radios:{},fields:{}}, i=0;
+      document.querySelectorAll('input[type=radio]:checked').forEach(function(r){s.radios[r.name]=r.id;});
+      textFields().forEach(function(t){s.fields['f'+i]=t.value;i++;});
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(s));
+      var m=document.getElementById('barMeta'); m.textContent='Zapisano roboczo ✓';
+    }catch(e){}
+  }
+  function loadState(){
+    try{
+      var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return;
+      var s=JSON.parse(raw), i=0;
+      Object.keys(s.radios||{}).forEach(function(n){var el=document.getElementById(s.radios[n]); if(el) el.checked=true;});
+      textFields().forEach(function(t){if(s.fields&&s.fields['f'+i]!=null)t.value=s.fields['f'+i];i++;});
+      document.getElementById('barMeta').textContent='Wczytano zapis roboczy ✓';
+    }catch(e){}
+  }
+
+  function collect(){
+    var lines=[];
+    lines.push("RAPORT OGLEDZIN — Skoda Superb 2.0 TDI Style (2022)");
+    lines.push("VIN: TMBJR7NP7N7051812  |  Nr rej.: GD3F491");
+    lines.push("Cena z ogloszenia: 97 000 zl  |  Ostatni urzedowy przebieg: 46 089 km (05.12.2025), deklarowany ~49 800 km");
+    lines.push("Wygenerowano: "+new Date().toLocaleString('pl-PL'));
+    lines.push("=".repeat(56));
+    document.querySelectorAll('section[data-title]').forEach(function(sec){
+      lines.push(""); lines.push("### "+sec.getAttribute('data-title'));
+      sec.querySelectorAll('.field').forEach(function(f){
+        var label=f.getAttribute('data-label')||'', parts=[], seg=f.querySelector('.seg');
+        if(seg){var c=seg.querySelector('input:checked'); parts.push(c?c.value:'—');}
+        f.querySelectorAll('input[type=text],input[type=number],input[type=date],input[type=time],textarea').forEach(function(t){
+          var v=(t.value||'').trim(); if(v){var tag=t.getAttribute('data-tag'); parts.push((tag?tag.replace(/_/g,' ')+': ':'')+v);}
+        });
+        lines.push("- "+label+": "+(parts.length?parts.join('  |  '):'—'));
+      });
+    });
+    var flags=[];
+    var odo=parseInt((document.getElementById('odoInput').value||'').replace(/\D/g,''),10);
+    if(!isNaN(odo)){
+      if(odo<OFFICIAL_ODO) flags.push(['red','Licznik ('+odo.toLocaleString('pl-PL')+' km) NIZSZY niz urzedowy 46 089 km — mozliwe cofniecie. Powazny sygnal.']);
+      else if(odo<LISTING_ODO-1500) flags.push(['amber','Licznik ('+odo.toLocaleString('pl-PL')+' km) wyraznie ponizej deklarowanych ~49 800 km — dopytaj.']);
+      else flags.push(['green','Licznik ('+odo.toLocaleString('pl-PL')+' km) spojny z historia (>= 46 089 km).']);
+    } else flags.push(['amber','Brak odczytu licznika — najwazniejsza pozycja, uzupelnij.']);
+    document.querySelectorAll('.paint').forEach(function(p){var v=parseInt(p.value,10); if(!isNaN(v)&&v>=200) flags.push(['amber','Lakier '+(p.getAttribute('data-tag')||'').replace('µm_','').replace(/_/g,' ')+': '+v+' µm — prawdopodobne lakierowanie.']);});
+    document.querySelectorAll('.field').forEach(function(f){
+      var seg=f.querySelector('.seg'); if(!seg) return;
+      var c=seg.querySelector('input:checked'); if(!c) return;
+      var lbl=seg.querySelector('input:checked + label'), v=lbl?lbl.getAttribute('data-v'):'', label=f.getAttribute('data-label')||'';
+      if(v==='Źle') flags.push(['red','„'+label+'” — problem ('+c.value+').']);
+      else if(v==='Uwaga') flags.push(['amber','„'+label+'” — do sprawdzenia ('+c.value+').']);
+    });
+    var podn=document.querySelector('input[name=podn]:checked');
+    if(podn&&podn.value!=='OK') flags.push(['amber','Sprzedawca niechetny/odmawia niezaleznego przegladu — ostroznie.']);
+    if(flags.length===0) flags.push(['green','Brak oznaczonych problemow. Puste pola to nie to samo co „OK”.']);
+    lines.push(""); lines.push("=".repeat(56)); lines.push("PODSUMOWANIE — FLAGI (auto):");
+    var order={red:0,amber:1,green:2}, tag={red:'[X]',amber:'[!]',green:'[OK]'};
+    flags.sort(function(a,b){return order[a[0]]-order[b[0]];});
+    flags.forEach(function(fl){lines.push(tag[fl[0]]+" "+fl[1]);});
+    return {text:lines.join("\n"),flags:flags};
+  }
+  function render(flags){
+    var ul=document.getElementById('flagList'); ul.innerHTML='';
+    flags.forEach(function(fl){var li=document.createElement('li'); li.innerHTML='<span class="dot '+fl[0]+'"></span><span>'+fl[1]+'</span>'; ul.appendChild(li);});
+    document.getElementById('result').classList.add('show');
+  }
+
+  document.getElementById('genBtn').addEventListener('click',function(){
+    var r=collect(); render(r.flags);
+    var stamp=new Date().toISOString().slice(0,16).replace(/[:T]/g,'-');
+    var blob=new Blob([r.text],{type:'text/plain;charset=utf-8'});
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+    a.download='ogledziny-skoda-superb-'+stamp+'.txt';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href); a.remove();},1200);
+    document.getElementById('barMeta').textContent='Pobrano raport ✓';
+    document.getElementById('result').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  document.getElementById('clearBtn').addEventListener('click',function(){
+    if(!confirm('Wyczyścić wszystkie odpowiedzi z tego formularza?')) return;
+    try{localStorage.removeItem(STORAGE_KEY);}catch(e){}
+    document.getElementById('form').reset();
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('barMeta').textContent='Formularz wyczyszczony';
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  document.addEventListener('input',saveState);
+  document.addEventListener('change',saveState);
+  if(document.readyState!=='loading') loadState();
+  else window.addEventListener('DOMContentLoaded',loadState);
+})();
+</script>
+</body>
+</html>
