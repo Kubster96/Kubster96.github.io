@@ -51,6 +51,8 @@
 
   .field{padding:12px 0;border-top:1px dashed var(--line)}
   .field:first-of-type{border-top:0}
+  /* Render data-label as a visible heading for data-entry fields (those without an inline .label) */
+  .field:not(:has(.label))::before{content:attr(data-label);display:block;font-weight:600;font-size:14px;color:var(--ink);line-height:1.35;margin-bottom:8px}
   .q-row{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
   .label{font-weight:500;font-size:14.5px;flex:1 1 220px}
   .hint{display:block;font-weight:400;font-size:12.5px;color:var(--ink-soft);margin-top:2px}
@@ -105,10 +107,12 @@
   .foot{font-size:12px;color:var(--ink-soft);text-align:center;margin:12px 0 8px}
 
   @media (max-width:560px){
-    .q-row{flex-direction:column;align-items:stretch}
+    .q-row{flex-direction:column;align-items:stretch;gap:8px}
+    .q-row .label{flex:0 0 auto}
     .seg{display:flex;width:100%}
     .seg label{flex:1}
     .grid3{grid-template-columns:1fr 1fr}
+    .grid3 input[type=text]{grid-column:1/-1}
   }
   @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
