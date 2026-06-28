@@ -48,6 +48,10 @@
   .num{font-family:Oswald;font-weight:700;color:var(--green);font-size:14px;border:1.5px solid var(--green);border-radius:6px;padding:1px 7px;flex:none}
   .sec-head h3{font-family:Oswald;font-weight:600;font-size:18px;margin:0;letter-spacing:.01em}
   .sec-note{font-size:12.5px;color:var(--ink-soft);margin:-4px 0 12px}
+  .subhead{font-family:Oswald;font-weight:700;font-size:13px;letter-spacing:.07em;text-transform:uppercase;
+    color:var(--green-d);margin:16px 0 2px;padding-top:12px;border-top:2px solid var(--line)}
+  .callout{background:#F4F1E8;border:1px solid var(--line);border-left:3px solid var(--amber);
+    border-radius:8px;padding:9px 12px;margin:8px 0;font-size:12.5px;color:var(--ink-soft)}
 
   .field{padding:12px 0;border-top:1px dashed var(--line)}
   .field:first-of-type{border-top:0}
@@ -79,6 +83,10 @@
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
   .mini{font-size:12px;color:var(--ink-soft);margin:2px 0 0;font-weight:500}
+
+  .checks{display:flex;flex-direction:column;gap:2px;margin-top:4px}
+  .chk{display:flex;align-items:center;gap:11px;font-size:14.5px;cursor:pointer;padding:7px 2px}
+  .chk input{width:21px;height:21px;flex:none;accent-color:var(--green);margin:0}
 
   .ask{background:#F4F1E8;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
   .ask .qq{font-weight:600;font-size:14px;color:var(--green-d)}
@@ -151,232 +159,257 @@
 
   <form id="form">
 
-  <section data-title="Dane spotkania">
-    <div class="sec-head"><span class="num">00</span><h3>Dane spotkania</h3></div>
-    <div class="field" data-label="Data oględzin">
-      <input type="date" data-tag="data">
-    </div>
-    <div class="field" data-label="Miejscowość">
-      <input type="text" data-tag="miejscowość" placeholder="np. Gdańsk">
-    </div>
-    <div class="field" data-label="Sprzedawca (imię / telefon)"><input type="text" placeholder="np. Marek, 600-000-000"></div>
-    <div class="field" data-label="Cena wywoławcza dziś (zł)"><input type="number" inputmode="numeric" data-tag="cena_wywoławcza" placeholder="97000"></div>
-  </section>
+  <section data-title="1. Przed jazdą — dokumenty, auto na zimno i pytania do właściciela">
+    <div class="sec-head"><span class="num">01</span><h3>Przed jazdą</h3></div>
+    <p class="sec-note">Wykonuj na stojąco, przy ZIMNYM silniku (dotknij maski — ma być zimna). Najpierw papiery, potem auto na zimno, na końcu pytania.</p>
 
-  <section data-title="1. Tożsamość auta i dokumenty">
-    <div class="sec-head"><span class="num">01</span><h3>Tożsamość i dokumenty</h3></div>
-    <p class="sec-note">Najpierw papiery — żeby raporty (CEPiK / carVertical) dotyczyły TEGO egzemplarza.</p>
-    <div class="field" data-label="VIN na nadwoziu = VIN w dowodzie = …N7051812">
-      <div class="q-row"><span class="label">VIN zgadza się w 3 miejscach (szyba/słupek, dowód, raport)<span class="hint">Tabliczka pod maską i za szybą.</span></span>
-        <span class="seg"><input type="radio" name="vin" id="vin1" value="OK"><label for="vin1" data-v="OK">OK</label><input type="radio" name="vin" id="vin2" value="Uwaga"><label for="vin2" data-v="Uwaga">Uwaga</label><input type="radio" name="vin" id="vin3" value="Źle"><label for="vin3" data-v="Źle">Źle</label></span></div>
+    <div class="field" data-label="Data oględzin"><input type="date" data-tag="data"></div>
+    <div class="field" data-label="Miejscowość"><input type="text" data-tag="miejscowość" placeholder="np. Gdańsk"></div>
+    <div class="field" data-label="Sprzedawca (imię / telefon)"><input type="text" data-tag="sprzedawca" placeholder="np. Marek, 600-000-000"></div>
+
+    <div class="subhead">A · Dokumenty i tożsamość</div>
+    <div class="field" data-label="VIN zgodny w 3 miejscach (= TMBJR7NP7N7051812)">
+      <div class="q-row"><span class="label">VIN się zgadza: szyba/słupek = dowód = raport<span class="hint">Tabliczka pod maską i za szybą.</span></span>
+        <span class="seg"><input type="radio" name="vin" id="vin_ok" value="OK"><label for="vin_ok" data-v="OK">OK</label><input type="radio" name="vin" id="vin_uw" value="Uwaga"><label for="vin_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="vin" id="vin_zl" value="Źle"><label for="vin_zl" data-v="Źle">Źle</label></span></div>
     </div>
     <div class="field" data-label="Nr rejestracyjny zgodny (GD3F491)">
       <div class="q-row"><span class="label">Tablice i dowód zgodne</span>
-        <span class="seg"><input type="radio" name="rej" id="rej1" value="OK"><label for="rej1" data-v="OK">OK</label><input type="radio" name="rej" id="rej2" value="Uwaga"><label for="rej2" data-v="Uwaga">Uwaga</label><input type="radio" name="rej" id="rej3" value="Źle"><label for="rej3" data-v="Źle">Źle</label></span></div>
+        <span class="seg"><input type="radio" name="rej" id="rej_ok" value="OK"><label for="rej_ok" data-v="OK">OK</label><input type="radio" name="rej" id="rej_uw" value="Uwaga"><label for="rej_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="rej" id="rej_zl" value="Źle"><label for="rej_zl" data-v="Źle">Źle</label></span></div>
     </div>
     <div class="field" data-label="Dowód rejestracyjny + polisa OC na miejscu">
       <div class="q-row"><span class="label">Dokumenty fizycznie obecne i aktualne</span>
-        <span class="seg"><input type="radio" name="doc" id="doc1" value="OK"><label for="doc1" data-v="OK">OK</label><input type="radio" name="doc" id="doc2" value="Uwaga"><label for="doc2" data-v="Uwaga">Uwaga</label><input type="radio" name="doc" id="doc3" value="Źle"><label for="doc3" data-v="Źle">Źle</label></span></div>
+        <span class="seg"><input type="radio" name="doc" id="doc_ok" value="OK"><label for="doc_ok" data-v="OK">OK</label><input type="radio" name="doc" id="doc_uw" value="Uwaga"><label for="doc_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="doc" id="doc_zl" value="Źle"><label for="doc_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Liczba kluczyków">
-      <div class="q-row"><span class="label">Ile kompletów kluczy? (najlepiej 2)</span>
-        <span class="seg"><input type="radio" name="klucze" id="kl1" value="2 lub więcej"><label for="kl1" data-v="OK">2+</label><input type="radio" name="klucze" id="kl2" value="1"><label for="kl2" data-v="Uwaga">1</label></span></div>
+    <div class="field" data-label="Liczba kluczyków (najlepiej 2+)">
+      <div class="q-row"><span class="label">Ile kompletów kluczy?</span>
+        <span class="seg"><input type="radio" name="klucze" id="klucze_ok" value="2 lub więcej"><label for="klucze_ok" data-v="OK">2+</label><input type="radio" name="klucze" id="klucze_uw" value="1"><label for="klucze_uw" data-v="Uwaga">1</label></span></div>
     </div>
     <div class="field" data-label="Sprzedaje właściciel z dowodu?">
       <div class="q-row"><span class="label">Osoba sprzedająca = właściciel w dowodzie (lub pełnomocnictwo)</span>
-        <span class="seg"><input type="radio" name="wlasc" id="w1" value="OK"><label for="w1" data-v="OK">Tak</label><input type="radio" name="wlasc" id="w2" value="Uwaga"><label for="w2" data-v="Uwaga">Pełn.</label><input type="radio" name="wlasc" id="w3" value="Źle"><label for="w3" data-v="Źle">Nie</label></span></div>
+        <span class="seg"><input type="radio" name="wlasc" id="wlasc_ok" value="OK"><label for="wlasc_ok" data-v="OK">Tak</label><input type="radio" name="wlasc" id="wlasc_uw" value="Uwaga"><label for="wlasc_uw" data-v="Uwaga">Pełn.</label><input type="radio" name="wlasc" id="wlasc_zl" value="Źle"><label for="wlasc_zl" data-v="Źle">Nie</label></span></div>
       <textarea class="note" data-tag="notatka" placeholder="Notatka (komis, sprzedaż w imieniu znajomego…)"></textarea>
     </div>
-  </section>
 
-  <section data-title="2. Licznik i przebieg">
-    <div class="sec-head"><span class="num">02</span><h3>Licznik i przebieg</h3></div>
-    <p class="sec-note">Najważniejsza rzecz — cała atrakcyjność ceny stoi na niskim przebiegu.</p>
+    <div class="subhead">B · Licznik i przebieg</div>
     <div class="field" data-label="ODCZYT LICZNIKA z auta (km)">
       <div class="q-row"><span class="label">Wpisz dokładny stan licznika<span class="hint">Musi być ≥ 46 089 km. Oczekiwane ≈ 49–52 tys.</span></span></div>
       <input type="number" inputmode="numeric" id="odoInput" data-tag="licznik_km" placeholder="np. 50120">
     </div>
     <div class="field" data-label="Spójność z historią (42 325 → 46 089 → dziś)">
       <div class="q-row"><span class="label">Licznik rośnie logicznie względem raportów</span>
-        <span class="seg"><input type="radio" name="odospan" id="os1" value="OK"><label for="os1" data-v="OK">OK</label><input type="radio" name="odospan" id="os2" value="Uwaga"><label for="os2" data-v="Uwaga">Uwaga</label><input type="radio" name="odospan" id="os3" value="Źle"><label for="os3" data-v="Źle">Źle</label></span></div>
+        <span class="seg"><input type="radio" name="odospan" id="odospan_ok" value="OK"><label for="odospan_ok" data-v="OK">OK</label><input type="radio" name="odospan" id="odospan_uw" value="Uwaga"><label for="odospan_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="odospan" id="odospan_zl" value="Źle"><label for="odospan_zl" data-v="Źle">Źle</label></span></div>
     </div>
     <div class="field" data-label="Ślady manipulacji licznikiem / deską">
-      <div class="q-row"><span class="label">Brak śladów demontażu zegarów, rys wokół deski</span>
-        <span class="seg"><input type="radio" name="manip" id="m1" value="OK"><label for="m1" data-v="OK">Brak</label><input type="radio" name="manip" id="m2" value="Uwaga"><label for="m2" data-v="Uwaga">Uwaga</label><input type="radio" name="manip" id="m3" value="Źle"><label for="m3" data-v="Źle">Są</label></span></div>
+      <div class="q-row"><span class="label">Brak śladów demontażu zegarów, rys wokół deski<span class="hint">Szukaj rys/odprysków przy śrubach i ramce zegarów oraz niepasujących odcieni plastiku deski — to ślad, że licznik był wyjmowany (np. do korekty przebiegu).</span></span>
+        <span class="seg"><input type="radio" name="manip" id="manip_ok" value="OK"><label for="manip_ok" data-v="OK">Brak</label><input type="radio" name="manip" id="manip_uw" value="Uwaga"><label for="manip_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="manip" id="manip_zl" value="Źle"><label for="manip_zl" data-v="Źle">Są</label></span></div>
     </div>
     <div class="field" data-label="Zużycie a przebieg (kierownica, fotel, pedały)">
       <div class="q-row"><span class="label">Stopień zużycia pasuje do ~50 tys. km<span class="hint">Wytarte elementy przy 50 tys. = sygnał ostrzegawczy.</span></span>
-        <span class="seg"><input type="radio" name="zuzycie" id="z1" value="OK"><label for="z1" data-v="OK">Pasuje</label><input type="radio" name="zuzycie" id="z2" value="Uwaga"><label for="z2" data-v="Uwaga">Uwaga</label><input type="radio" name="zuzycie" id="z3" value="Źle"><label for="z3" data-v="Źle">Za duże</label></span></div>
+        <span class="seg"><input type="radio" name="zuzycie" id="zuzycie_ok" value="OK"><label for="zuzycie_ok" data-v="OK">Pasuje</label><input type="radio" name="zuzycie" id="zuzycie_uw" value="Uwaga"><label for="zuzycie_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="zuzycie" id="zuzycie_zl" value="Źle"><label for="zuzycie_zl" data-v="Źle">Za duże</label></span></div>
       <textarea class="note" data-tag="notatka" placeholder="Co wygląda na zużyte / świeże?"></textarea>
     </div>
-  </section>
 
-  <section data-title="3. Silnik 2.0 TDI (zimny rozruch!)">
-    <div class="sec-head"><span class="num">03</span><h3>Silnik 2.0 TDI</h3></div>
-    <p class="sec-note">Przyjedź, gdy silnik jest ZIMNY — sprzedawca nie powinien go wcześniej rozgrzewać.</p>
-    <div class="field" data-label="Silnik był zimny przy rozruchu?">
-      <div class="q-row"><span class="label">Maska/silnik zimne na start</span>
-        <span class="seg"><input type="radio" name="zimny" id="zi1" value="OK"><label for="zi1" data-v="OK">Tak</label><input type="radio" name="zimny" id="zi2" value="Źle"><label for="zi2" data-v="Źle">Już ciepły</label></span></div>
+    <div class="subhead">C · Auto na zimno (przed odpaleniem)</div>
+    <div class="field" data-label="Maska/silnik zimne przy rozruchu?">
+      <div class="q-row"><span class="label">Dotknij maski — ma być zimna na start</span>
+        <span class="seg"><input type="radio" name="zimny" id="zimny_ok" value="OK"><label for="zimny_ok" data-v="OK">Zimny</label><input type="radio" name="zimny" id="zimny_zl" value="Źle"><label for="zimny_zl" data-v="Źle">Już ciepły</label></span></div>
     </div>
-    <div class="field" data-label="Rozruch i praca na zimno (równo, bez stuków)">
-      <div class="q-row"><span class="label">Odpala od razu, równa praca, bez kołatania</span>
-        <span class="seg"><input type="radio" name="praca" id="p1" value="OK"><label for="p1" data-v="OK">OK</label><input type="radio" name="praca" id="p2" value="Uwaga"><label for="p2" data-v="Uwaga">Uwaga</label><input type="radio" name="praca" id="p3" value="Źle"><label for="p3" data-v="Źle">Źle</label></span></div>
+    <div class="field" data-label="Zimny rozruch bez kołatania">
+      <div class="q-row"><span class="label">Odpala od razu, równa praca, bez stuków</span>
+        <span class="seg"><input type="radio" name="rozruch" id="rozruch_ok" value="OK"><label for="rozruch_ok" data-v="OK">OK</label><input type="radio" name="rozruch" id="rozruch_uw" value="Uwaga"><label for="rozruch_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="rozruch" id="rozruch_zl" value="Źle"><label for="rozruch_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Dym z wydechu (zimny i po gazie)">
-      <div class="q-row"><span class="label">Brak siwego/czarnego/niebieskiego dymu</span>
-        <span class="seg"><input type="radio" name="dym" id="d1" value="OK"><label for="d1" data-v="OK">Czysto</label><input type="radio" name="dym" id="d2" value="Uwaga"><label for="d2" data-v="Uwaga">Lekki</label><input type="radio" name="dym" id="d3" value="Źle"><label for="d3" data-v="Źle">Mocny</label></span></div>
+    <div class="field" data-label="Dym z wydechu (siwy / niebieski)">
+      <div class="q-row"><span class="label">Brak siwego/niebieskiego dymu na zimno</span>
+        <span class="seg"><input type="radio" name="dym" id="dym_ok" value="OK"><label for="dym_ok" data-v="OK">Czysto</label><input type="radio" name="dym" id="dym_uw" value="Uwaga"><label for="dym_uw" data-v="Uwaga">Lekki</label><input type="radio" name="dym" id="dym_zl" value="Źle"><label for="dym_zl" data-v="Źle">Mocny</label></span></div>
     </div>
-    <div class="field" data-label="Kontrolki (check, DPF, AdBlue, świece)">
-      <div class="q-row"><span class="label">Po rozgrzaniu brak świecących kontrolek błędów</span>
-        <span class="seg"><input type="radio" name="kontrolki" id="k1" value="OK"><label for="k1" data-v="OK">Brak</label><input type="radio" name="kontrolki" id="k2" value="Uwaga"><label for="k2" data-v="Uwaga">Uwaga</label><input type="radio" name="kontrolki" id="k3" value="Źle"><label for="k3" data-v="Źle">Świecą</label></span></div>
+    <div class="field" data-label="Kontrolki gasną po rozruchu">
+      <div class="q-row"><span class="label">Check/DPF/AdBlue/świece — wszystko gaśnie</span>
+        <span class="seg"><input type="radio" name="kontrolki" id="kontrolki_ok" value="OK"><label for="kontrolki_ok" data-v="OK">Gasną</label><input type="radio" name="kontrolki" id="kontrolki_uw" value="Uwaga"><label for="kontrolki_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="kontrolki" id="kontrolki_zl" value="Źle"><label for="kontrolki_zl" data-v="Źle">Świecą</label></span></div>
     </div>
-    <div class="field" data-label="Wycieki / poziom oleju / płyny pod maską">
-      <div class="q-row"><span class="label">Sucho pod spodem, olej na poziomie, płyn czysty</span>
-        <span class="seg"><input type="radio" name="plyny" id="pl1" value="OK"><label for="pl1" data-v="OK">OK</label><input type="radio" name="plyny" id="pl2" value="Uwaga"><label for="pl2" data-v="Uwaga">Uwaga</label><input type="radio" name="plyny" id="pl3" value="Źle"><label for="pl3" data-v="Źle">Źle</label></span></div>
-      <textarea class="note" data-tag="notatka" placeholder="Wycieki? poziom AdBlue? data wymiany oleju z naklejki?"></textarea>
+    <div class="field" data-label="Poziom oleju i płynu (brak emulsji pod korkiem)">
+      <div class="q-row"><span class="label">Olej na poziomie, płyn czysty, brak „majonezu” pod korkiem oleju<span class="hint">Odkręć korek wlewu oleju i obejrzyj jego spód: kremowa, jasnobrązowa maź = mieszanie oleju z płynem chłodniczym (np. uszczelka pod głowicą). Sprawdź też bagnet (poziom między min–max) i czy płyn w zbiorniczku nie jest zaolejony.</span></span>
+        <span class="seg"><input type="radio" name="plyny" id="plyny_ok" value="OK"><label for="plyny_ok" data-v="OK">OK</label><input type="radio" name="plyny" id="plyny_uw" value="Uwaga"><label for="plyny_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="plyny" id="plyny_zl" value="Źle"><label for="plyny_zl" data-v="Źle">Źle</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Poziom oleju, kolor płynu, data wymiany z naklejki…"></textarea>
     </div>
-  </section>
+    <div class="field" data-label="Poziom / zasięg AdBlue">
+      <div class="q-row"><span class="label">Wystarczający zapas AdBlue</span>
+        <span class="seg"><input type="radio" name="adblue" id="adblue_ok" value="OK"><label for="adblue_ok" data-v="OK">OK</label><input type="radio" name="adblue" id="adblue_uw" value="Uwaga"><label for="adblue_uw" data-v="Uwaga">Mało</label></span></div>
+      <input type="number" inputmode="numeric" data-tag="adblue_zasieg_km" placeholder="zasięg AdBlue z komputera (km)">
+    </div>
+    <div class="field" data-label="Sucho pod spodem (brak wycieków)">
+      <div class="q-row"><span class="label">Pod autem sucho, brak plam oleju/płynów<span class="hint">Zajrzyj pod silnik i skrzynię oraz na podłoże w miejscu, gdzie auto stało. Mokre, błyszczące powierzchnie, zacieki na osłonie lub kapiące krople = wyciek.</span></span>
+        <span class="seg"><input type="radio" name="sucho" id="sucho_ok" value="OK"><label for="sucho_ok" data-v="OK">Sucho</label><input type="radio" name="sucho" id="sucho_uw" value="Uwaga"><label for="sucho_uw" data-v="Uwaga">Ślady</label><input type="radio" name="sucho" id="sucho_zl" value="Źle"><label for="sucho_zl" data-v="Źle">Cieknie</label></span></div>
+    </div>
 
-  <section data-title="4. Skrzynia DSG (DQ381, 7-bieg)">
-    <div class="sec-head"><span class="num">04</span><h3>Skrzynia DSG</h3></div>
-    <p class="sec-note">Mokra DSG DQ381 — wymaga wymiany oleju (~co 60 tys.). Uważaj na ruszanie i bardzo wolną jazdę.</p>
-    <div class="field" data-label="Ruszanie i jazda 5–20 km/h (korki)">
-      <div class="q-row"><span class="label">Płynnie, bez szarpania/kopania/wibracji sprzęgła</span>
-        <span class="seg"><input type="radio" name="dsg1" id="dg1" value="OK"><label for="dg1" data-v="OK">OK</label><input type="radio" name="dsg1" id="dg2" value="Uwaga"><label for="dg2" data-v="Uwaga">Uwaga</label><input type="radio" name="dsg1" id="dg3" value="Źle"><label for="dg3" data-v="Źle">Szarpie</label></span></div>
+    <div class="subhead">D · Nadwozie i lakier (ocena wzrokowa, bez miernika)</div>
+    <div class="callout"><b>Jak wykryć lakierowanie bez lakieromierza:</b> oglądaj każdy element pod kątem, w pełnym świetle (najlepiej słońce) i porównuj z sąsiednim — szukaj różnic w odcieniu, połysku i fakturze („skórka pomarańczy”). Zajrzyj na gumowe uszczelki, czarne plastiki i wnętrza nadkoli przy krawędziach — drobinki lakieru (overspray) zdradzają naprawę. Auto ma też folię PPF i powłokę ceramiczną, które mogą maskować drobne rysy/naprawy.</div>
+    <div class="field" data-label="Które elementy mają PPF / powłokę ceramiczną?">
+      <input type="text" data-tag="ppf_elementy" placeholder="np. progi, klapa, maska…">
     </div>
-    <div class="field" data-label="Zmiana biegów / kickdown">
-      <div class="q-row"><span class="label">Szybkie, gładkie zmiany; reakcja na gaz</span>
-        <span class="seg"><input type="radio" name="dsg2" id="dh1" value="OK"><label for="dh1" data-v="OK">OK</label><input type="radio" name="dsg2" id="dh2" value="Uwaga"><label for="dh2" data-v="Uwaga">Uwaga</label><input type="radio" name="dsg2" id="dh3" value="Źle"><label for="dh3" data-v="Źle">Źle</label></span></div>
-    </div>
-    <div class="field" data-label="Czy był serwis oleju DSG? (zapytaj + faktura)">
-      <div class="q-row"><span class="label">Potwierdzona wymiana oleju w skrzyni</span>
-        <span class="seg"><input type="radio" name="dsg3" id="dj1" value="OK"><label for="dj1" data-v="OK">Tak</label><input type="radio" name="dsg3" id="dj2" value="Uwaga"><label for="dj2" data-v="Uwaga">Nie wie</label><input type="radio" name="dsg3" id="dj3" value="Źle"><label for="dj3" data-v="Źle">Nie</label></span></div>
-      <textarea class="note" data-tag="notatka" placeholder="Data/przebieg wymiany oleju DSG, jeśli podał"></textarea>
-    </div>
-  </section>
-
-  <section data-title="5. Zawieszenie, hamulce, opony">
-    <div class="sec-head"><span class="num">05</span><h3>Zawieszenie · hamulce · opony</h3></div>
-    <div class="field" data-label="Zawieszenie (stuki na progach)">
-      <div class="q-row"><span class="label">Cicho, bez stuków/klekotów, dobre tłumienie</span>
-        <span class="seg"><input type="radio" name="zaw" id="zw1" value="OK"><label for="zw1" data-v="OK">OK</label><input type="radio" name="zaw" id="zw2" value="Uwaga"><label for="zw2" data-v="Uwaga">Uwaga</label><input type="radio" name="zaw" id="zw3" value="Źle"><label for="zw3" data-v="Źle">Źle</label></span></div>
-    </div>
-    <div class="field" data-label="Hamulce (tarcze/klocki, równe hamowanie)">
-      <div class="q-row"><span class="label">Brak bicia, pisków, ściągania</span>
-        <span class="seg"><input type="radio" name="ham" id="hm1" value="OK"><label for="hm1" data-v="OK">OK</label><input type="radio" name="ham" id="hm2" value="Uwaga"><label for="hm2" data-v="Uwaga">Uwaga</label><input type="radio" name="ham" id="hm3" value="Źle"><label for="hm3" data-v="Źle">Źle</label></span></div>
-    </div>
-    <div class="field" data-label="Opony — rozmiar / DOT / zużycie">
-      <div class="grid2"><input type="text" data-tag="rozmiar_opon" placeholder="Rozmiar (215/55 R17?)"><input type="text" data-tag="DOT_rok" placeholder="DOT / rok opon"></div>
-      <textarea class="note" data-tag="notatka" placeholder="Równe zużycie? komplet zima+lato? bieżnik?"></textarea>
-    </div>
-  </section>
-
-  <section data-title="6. Nadwozie i lakier">
-    <div class="sec-head"><span class="num">06</span><h3>Nadwozie i lakier</h3></div>
-    <p class="sec-note">Najlepiej z grubościomierzem. Fabryka ≈ 90–150 µm. &gt; ~200 µm = prawdopodobne lakierowanie/szpachla.</p>
-    <div class="field" data-label="Grubość lakieru (µm) — wpisz pomiary">
-      <p class="mini">Maska / Dach / Klapa / Drzwi L / Drzwi P / Błotniki</p>
-      <div class="grid3">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_maska" placeholder="maska">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_dach" placeholder="dach">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_klapa" placeholder="klapa">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_drzwi_L" placeholder="drzwi L">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_drzwi_P" placeholder="drzwi P">
-        <input type="number" inputmode="numeric" class="paint" data-tag="µm_błotniki" placeholder="błotniki">
-      </div>
+    <div class="field" data-label="Ślady lakierowania / naprawy (ocena wzrokowa)">
+      <div class="q-row"><span class="label">Jednolity lakier na całym aucie<span class="hint">Sprawdź: odcień i połysk sąsiednich elementów w słońcu, overspray na uszczelkach/plastikach, „skórka pomarańczy” odbiegająca od reszty, ślady taśmy maskującej lub pyłki zatopione w lakierze = naprawa po szkodzie.</span></span>
+        <span class="seg"><input type="radio" name="lakier" id="lakier_ok" value="OK"><label for="lakier_ok" data-v="OK">Jednolity</label><input type="radio" name="lakier" id="lakier_uw" value="Uwaga"><label for="lakier_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="lakier" id="lakier_zl" value="Źle"><label for="lakier_zl" data-v="Źle">Różni się</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Który element odbiega odcieniem/połyskiem? gdzie overspray?"></textarea>
     </div>
     <div class="field" data-label="Równość szczelin / pasowanie elementów">
-      <div class="q-row"><span class="label">Równe odstępy maski, drzwi, klapy</span>
-        <span class="seg"><input type="radio" name="szczel" id="sc1" value="OK"><label for="sc1" data-v="OK">OK</label><input type="radio" name="szczel" id="sc2" value="Uwaga"><label for="sc2" data-v="Uwaga">Uwaga</label><input type="radio" name="szczel" id="sc3" value="Źle"><label for="sc3" data-v="Źle">Źle</label></span></div>
+      <div class="q-row"><span class="label">Równe odstępy maski, drzwi, klapy<span class="hint">Przejedź wzrokiem wzdłuż każdej szczeliny i porównaj lewą stronę auta z prawą — szpara ma być równa na całej długości. Klinujący się lub nierówny odstęp = element rozbierany/ustawiany po wypadku.</span></span>
+        <span class="seg"><input type="radio" name="szczel" id="szczel_ok" value="OK"><label for="szczel_ok" data-v="OK">OK</label><input type="radio" name="szczel" id="szczel_uw" value="Uwaga"><label for="szczel_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="szczel" id="szczel_zl" value="Źle"><label for="szczel_zl" data-v="Źle">Źle</label></span></div>
     </div>
     <div class="field" data-label="Korozja / spawy / dno i progi">
-      <div class="q-row"><span class="label">Brak rdzy, oryginalne spawy, czyste progi</span>
-        <span class="seg"><input type="radio" name="koroz" id="ko1" value="OK"><label for="ko1" data-v="OK">OK</label><input type="radio" name="koroz" id="ko2" value="Uwaga"><label for="ko2" data-v="Uwaga">Uwaga</label><input type="radio" name="koroz" id="ko3" value="Źle"><label for="ko3" data-v="Źle">Źle</label></span></div>
+      <div class="q-row"><span class="label">Brak rdzy, oryginalne spawy, czyste progi<span class="hint">Zajrzyj w nadkola, pod listwy progowe i pod gumy uszczelek drzwi. Zdrapany lakier / ślady klucza na łbach śrub zawiasów, błotników, pasów = element był odkręcany (wymiana po szkodzie).</span></span>
+        <span class="seg"><input type="radio" name="koroz" id="koroz_ok" value="OK"><label for="koroz_ok" data-v="OK">OK</label><input type="radio" name="koroz" id="koroz_uw" value="Uwaga"><label for="koroz_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="koroz" id="koroz_zl" value="Źle"><label for="koroz_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Zgodność lakieru i felg ze specyfikacją">
-      <div class="q-row"><span class="label">Lakier perłowy + felgi 17" zgodne z VIN<span class="hint">W ogłoszeniu było „metalik"/16".</span></span>
-        <span class="seg"><input type="radio" name="spec" id="sp1" value="OK"><label for="sp1" data-v="OK">Zgodne</label><input type="radio" name="spec" id="sp2" value="Uwaga"><label for="sp2" data-v="Uwaga">Różni się</label></span></div>
-      <textarea class="note" data-tag="notatka" placeholder="Co się różni? (rozmiar felg, rodzaj lakieru)"></textarea>
+    <div class="field" data-label="Jednolite daty produkcji szyb">
+      <div class="q-row"><span class="label">Wszystkie szyby z tego samego okresu (brak wymian po stłuczce)<span class="hint">Na każdej szybie przy logo jest kod z kropkami i rokiem produkcji. Jedna szyba nowsza (inny rok, inny układ kropek) niż reszta = była wymieniana — dopytaj, czy po stłuczce.</span></span>
+        <span class="seg"><input type="radio" name="szyby" id="szyby_ok" value="OK"><label for="szyby_ok" data-v="OK">Jednolite</label><input type="radio" name="szyby" id="szyby_uw" value="Uwaga"><label for="szyby_uw" data-v="Uwaga">Różnią się</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Która szyba odstaje datą? co odbiega grubością lakieru?"></textarea>
     </div>
-  </section>
 
-  <section data-title="7. Wnętrze i elektronika">
-    <div class="sec-head"><span class="num">07</span><h3>Wnętrze i elektronika</h3></div>
-    <p class="sec-note">Przejdź po wyposażeniu z raportu — wszystko ma działać.</p>
-    <div class="field" data-label="Klimatyzacja 3-strefy (chłodzi i grzeje)">
-      <div class="q-row"><span class="label">Climatronic działa we wszystkich strefach</span>
-        <span class="seg"><input type="radio" name="klima" id="cl1" value="OK"><label for="cl1" data-v="OK">OK</label><input type="radio" name="klima" id="cl2" value="Uwaga"><label for="cl2" data-v="Uwaga">Uwaga</label><input type="radio" name="klima" id="cl3" value="Źle"><label for="cl3" data-v="Źle">Źle</label></span></div>
+    <div class="subhead">E · Wnętrze na postoju</div>
+    <div class="field" data-label="Climatronic 3 strefy (chłodzi i grzeje)">
+      <div class="q-row"><span class="label">Klimatyzacja działa we wszystkich strefach<span class="hint">Ustaw skrajnie różne temperatury kierowca / pasażer / tył i sprawdź ręką, czy z nawiewów faktycznie leci inne powietrze. Włącz AC — po chwili musi wyraźnie chłodzić (nie tylko „mniej grzać”).</span></span>
+        <span class="seg"><input type="radio" name="klima" id="klima_ok" value="OK"><label for="klima_ok" data-v="OK">OK</label><input type="radio" name="klima" id="klima_uw" value="Uwaga"><label for="klima_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="klima" id="klima_zl" value="Źle"><label for="klima_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Kamera cofania + czujniki + Front Assist">
-      <div class="q-row"><span class="label">Kamera, czujniki przód/tył, asystenci działają</span>
-        <span class="seg"><input type="radio" name="kam" id="ka1" value="OK"><label for="ka1" data-v="OK">OK</label><input type="radio" name="kam" id="ka2" value="Uwaga"><label for="ka2" data-v="Uwaga">Uwaga</label><input type="radio" name="kam" id="ka3" value="Źle"><label for="ka3" data-v="Źle">Źle</label></span></div>
+    <div class="field" data-label="Kamera cofania + czujniki">
+      <div class="q-row"><span class="label">Kamera i czujniki przód/tył działają</span>
+        <span class="seg"><input type="radio" name="kam" id="kam_ok" value="OK"><label for="kam_ok" data-v="OK">OK</label><input type="radio" name="kam" id="kam_uw" value="Uwaga"><label for="kam_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="kam" id="kam_zl" value="Źle"><label for="kam_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Fotele podgrzewane/elektryczne, Virtual Cockpit">
-      <div class="q-row"><span class="label">Grzanie foteli, regulacje el., zegary cyfrowe OK</span>
-        <span class="seg"><input type="radio" name="fot" id="fo1" value="OK"><label for="fo1" data-v="OK">OK</label><input type="radio" name="fot" id="fo2" value="Uwaga"><label for="fo2" data-v="Uwaga">Uwaga</label><input type="radio" name="fot" id="fo3" value="Źle"><label for="fo3" data-v="Źle">Źle</label></span></div>
+    <div class="field" data-label="Podgrzewane fotele + regulacje elektryczne">
+      <div class="q-row"><span class="label">Grzanie foteli i wszystkie regulacje OK</span>
+        <span class="seg"><input type="radio" name="fot" id="fot_ok" value="OK"><label for="fot_ok" data-v="OK">OK</label><input type="radio" name="fot" id="fot_uw" value="Uwaga"><label for="fot_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="fot" id="fot_zl" value="Źle"><label for="fot_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Multimedia / CarPlay / Android Auto / głośniki">
-      <div class="q-row"><span class="label">Ekran, łączność telefonu, nagłośnienie bez usterek</span>
-        <span class="seg"><input type="radio" name="mult" id="mu1" value="OK"><label for="mu1" data-v="OK">OK</label><input type="radio" name="mult" id="mu2" value="Uwaga"><label for="mu2" data-v="Uwaga">Uwaga</label><input type="radio" name="mult" id="mu3" value="Źle"><label for="mu3" data-v="Źle">Źle</label></span></div>
+    <div class="field" data-label="Virtual Cockpit (zegary cyfrowe)">
+      <div class="q-row"><span class="label">Cyfrowe zegary działają, bez wad ekranu</span>
+        <span class="seg"><input type="radio" name="vc" id="vc_ok" value="OK"><label for="vc_ok" data-v="OK">OK</label><input type="radio" name="vc" id="vc_uw" value="Uwaga"><label for="vc_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="vc" id="vc_zl" value="Źle"><label for="vc_zl" data-v="Źle">Źle</label></span></div>
     </div>
-    <div class="field" data-label="Elektryczna klapa, szyby, lusterka, keyless">
-      <div class="q-row"><span class="label">Wszystkie funkcje el. działają</span>
-        <span class="seg"><input type="radio" name="elek" id="el1" value="OK"><label for="el1" data-v="OK">OK</label><input type="radio" name="elek" id="el2" value="Uwaga"><label for="el2" data-v="Uwaga">Uwaga</label><input type="radio" name="elek" id="el3" value="Źle"><label for="el3" data-v="Źle">Źle</label></span></div>
-      <textarea class="note" data-tag="notatka" placeholder="Co nie działa / grzechocze / brakuje?"></textarea>
+    <div class="field" data-label="Multimedia / CarPlay / Android Auto">
+      <div class="q-row"><span class="label">Ekran, łączność telefonu, głośniki bez usterek</span>
+        <span class="seg"><input type="radio" name="mult" id="mult_ok" value="OK"><label for="mult_ok" data-v="OK">OK</label><input type="radio" name="mult" id="mult_uw" value="Uwaga"><label for="mult_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="mult" id="mult_zl" value="Źle"><label for="mult_zl" data-v="Źle">Źle</label></span></div>
     </div>
-  </section>
+    <div class="field" data-label="Elektryczna klapa bagażnika">
+      <div class="q-row"><span class="label">Otwiera/zamyka się elektrycznie</span>
+        <span class="seg"><input type="radio" name="klapa" id="klapa_ok" value="OK"><label for="klapa_ok" data-v="OK">OK</label><input type="radio" name="klapa" id="klapa_uw" value="Uwaga"><label for="klapa_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="klapa" id="klapa_zl" value="Źle"><label for="klapa_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Gniazda USB / 12V">
+      <div class="q-row"><span class="label">Wszystkie gniazda ładują</span>
+        <span class="seg"><input type="radio" name="gniazda" id="gniazda_ok" value="OK"><label for="gniazda_ok" data-v="OK">OK</label><input type="radio" name="gniazda" id="gniazda_uw" value="Uwaga"><label for="gniazda_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="gniazda" id="gniazda_zl" value="Źle"><label for="gniazda_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="Zapach / wilgoć (pleśń, ślady zalania)">
+      <div class="q-row"><span class="label">Brak zapachu wilgoci, pleśni, śladów zalania (sprawdź dywaniki, koło zapasowe)</span>
+        <span class="seg"><input type="radio" name="zapach" id="zapach_ok" value="OK"><label for="zapach_ok" data-v="OK">Sucho</label><input type="radio" name="zapach" id="zapach_uw" value="Uwaga"><label for="zapach_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="zapach" id="zapach_zl" value="Źle"><label for="zapach_zl" data-v="Źle">Wilgoć</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Zapach, stan podsufitki, dywaników, wnęki koła zapasowego…"></textarea>
+    </div>
+    <div class="field" data-label="Kontrolka poduszek powietrznych gaśnie">
+      <div class="q-row"><span class="label">Lampka airbag gaśnie po rozruchu (brak rozbrojonych poduszek)</span>
+        <span class="seg"><input type="radio" name="airbag" id="airbag_ok" value="OK"><label for="airbag_ok" data-v="OK">Gaśnie</label><input type="radio" name="airbag" id="airbag_uw" value="Uwaga"><label for="airbag_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="airbag" id="airbag_zl" value="Źle"><label for="airbag_zl" data-v="Źle">Świeci</label></span></div>
+    </div>
 
-  <section data-title="8. Jazda próbna">
-    <div class="sec-head"><span class="num">08</span><h3>Jazda próbna</h3></div>
-    <p class="sec-note">Koniecznie miasto + wyższa prędkość (obwodnica). Min. 15–20 minut.</p>
-    <div class="field" data-label="Prowadzenie / brak ściągania">
-      <div class="q-row"><span class="label">Jedzie prosto, kierownica wyśrodkowana, bez drgań</span>
-        <span class="seg"><input type="radio" name="prow" id="pr1" value="OK"><label for="pr1" data-v="OK">OK</label><input type="radio" name="prow" id="pr2" value="Uwaga"><label for="pr2" data-v="Uwaga">Uwaga</label><input type="radio" name="prow" id="pr3" value="Źle"><label for="pr3" data-v="Źle">Źle</label></span></div>
-    </div>
-    <div class="field" data-label="Przyspieszenie / moc / kultura na trasie">
-      <div class="q-row"><span class="label">Równo ciągnie, brak utraty mocy, temperatura stabilna</span>
-        <span class="seg"><input type="radio" name="moc" id="mc1" value="OK"><label for="mc1" data-v="OK">OK</label><input type="radio" name="moc" id="mc2" value="Uwaga"><label for="mc2" data-v="Uwaga">Uwaga</label><input type="radio" name="moc" id="mc3" value="Źle"><label for="mc3" data-v="Źle">Źle</label></span></div>
-    </div>
-    <div class="field" data-label="Hałasy (łożyska, stuki, gwizdy turbo)">
-      <div class="q-row"><span class="label">Brak buczenia łożysk, świstów, stuków</span>
-        <span class="seg"><input type="radio" name="halas" id="ha1" value="OK"><label for="ha1" data-v="OK">OK</label><input type="radio" name="halas" id="ha2" value="Uwaga"><label for="ha2" data-v="Uwaga">Uwaga</label><input type="radio" name="halas" id="ha3" value="Źle"><label for="ha3" data-v="Źle">Źle</label></span></div>
-      <textarea class="note" data-tag="notatka" placeholder="Wrażenia z jazdy, cokolwiek niepokojącego"></textarea>
-    </div>
-  </section>
-
-  <section data-title="9. Pytania do sprzedawcy">
-    <div class="sec-head"><span class="num">09</span><h3>Pytania do sprzedawcy</h3></div>
-    <p class="sec-note">Zadaj wprost i zanotuj odpowiedzi — to materiał do oceny wiarygodności.</p>
+    <div class="subhead">F · Pytania do właściciela</div>
     <div class="ask"><span class="qq">Dlaczego sprzedajesz i jak długo masz auto?</span></div>
     <div class="field" data-label="Powód sprzedaży / okres posiadania"><textarea data-tag="odp" placeholder="Odpowiedź…"></textarea></div>
     <div class="ask"><span class="qq">Kto jeździł wcześniej? (w CEPiK rok użytkowała firma)</span></div>
     <div class="field" data-label="Historia użytkowania (firma/leasing?)"><textarea data-tag="odp" placeholder="Czy wie o schemacie salon → firma ~rok → osoba?"></textarea></div>
     <div class="ask"><span class="qq">Jest pełna książka serwisowa i faktury? Serwis w ASO?</span></div>
-    <div class="field" data-label="Serwis / książka / faktury"><textarea data-tag="odp" placeholder="Interwał 30 tys./2 lata — czy trzymane?"></textarea></div>
+    <div class="field" data-label="Serwis / książka / faktury"><textarea data-tag="odp" placeholder="Interwał 30 tys./2 lata — czy trzymane? ASO?"></textarea></div>
     <div class="ask"><span class="qq">Czy auto było lakierowane / miało stłuczki?</span></div>
-    <div class="field" data-label="Historia szkód / lakierowania"><textarea data-tag="odp" placeholder="Porównaj z grubościomierzem z sekcji 6"></textarea></div>
-    <div class="ask"><span class="qq">Co ostatnio wymieniane? Co wymaga wkrótce uwagi?</span></div>
-    <div class="field" data-label="Ostatnie naprawy / co przed nami"><textarea data-tag="odp" placeholder="Olej, rozrząd, DSG, opony, klocki…"></textarea></div>
+    <div class="field" data-label="Historia szkód / lakierowania"><textarea data-tag="odp" placeholder="Porównaj z grubościomierzem (sekcja D)"></textarea></div>
+    <div class="ask"><span class="qq">Kiedy ostatnio: olej DSG, pasek rozrządu, klocki, akumulator?</span></div>
+    <div class="field" data-label="Ostatnie wymiany (DSG / rozrząd / klocki / akumulator)"><textarea data-tag="odp" placeholder="Daty i przebiegi, jeśli zna…"></textarea></div>
+    <div class="ask"><span class="qq">Mogę podpiąć OBD i sprawdzić błędy / regeneracje DPF?</span></div>
+    <div class="field" data-label="Zgoda na OBD (błędy, licznik regeneracji DPF)"><textarea data-tag="odp" placeholder="Reakcja właściciela na propozycję OBD…"></textarea></div>
     <div class="ask"><span class="qq">Zgoda na przegląd na podnośniku w niezależnym serwisie?</span></div>
-    <div class="field" data-label="Zgoda na niezależny przegląd">
+    <div class="field" data-label="Zgoda na niezależny przegląd na podnośniku">
       <div class="q-row"><span class="label">Sprzedawca się zgadza</span>
-        <span class="seg"><input type="radio" name="podn" id="pd1" value="OK"><label for="pd1" data-v="OK">Tak</label><input type="radio" name="podn" id="pd2" value="Uwaga"><label for="pd2" data-v="Uwaga">Niechętnie</label><input type="radio" name="podn" id="pd3" value="Źle"><label for="pd3" data-v="Źle">Nie</label></span></div>
+        <span class="seg"><input type="radio" name="podn" id="podn_ok" value="OK"><label for="podn_ok" data-v="OK">Tak</label><input type="radio" name="podn" id="podn_uw" value="Uwaga"><label for="podn_uw" data-v="Uwaga">Niechętnie</label><input type="radio" name="podn" id="podn_zl" value="Źle"><label for="podn_zl" data-v="Źle">Nie</label></span></div>
+    </div>
+    <div class="ask"><span class="qq">Czy PPF / ceramika nie zakrywa napraw lakierniczych?</span></div>
+    <div class="field" data-label="PPF/ceramika a ewentualne naprawy pod spodem"><textarea data-tag="odp" placeholder="Co właściciel mówi o tym, co jest pod folią/powłoką?"></textarea></div>
+  </section>
+
+  <section data-title="2. Jazda próbna — krok po kroku">
+    <div class="sec-head"><span class="num">02</span><h3>Jazda próbna</h3></div>
+    <p class="sec-note">Wykonuj po kolei. Min. 15–20 min: parking → miasto → obwodnica. Bezpiecznie, zgodnie z przepisami.</p>
+
+    <div class="field" data-label="1. Przed ruszeniem (kontrolki, komunikaty, paliwo)">
+      <div class="q-row"><span class="label">Ustaw fotel/lusterka. Po zapłonie ABS/ESP/airbag gasną, brak komunikatów błędów, paliwo/AdBlue OK</span>
+        <span class="seg"><input type="radio" name="jp1" id="jp1_ok" value="OK"><label for="jp1_ok" data-v="OK">OK</label><input type="radio" name="jp1" id="jp1_uw" value="Uwaga"><label for="jp1_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp1" id="jp1_zl" value="Źle"><label for="jp1_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="2. Ruszanie i bardzo wolna jazda 5–20 km/h (parking)">
+      <div class="q-row"><span class="label">DSG płynnie, bez szarpania/kopania/wibracji sprzęgła</span>
+        <span class="seg"><input type="radio" name="jp2" id="jp2_ok" value="OK"><label for="jp2_ok" data-v="OK">OK</label><input type="radio" name="jp2" id="jp2_uw" value="Uwaga"><label for="jp2_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp2" id="jp2_zl" value="Źle"><label for="jp2_zl" data-v="Źle">Szarpie</label></span></div>
+    </div>
+    <div class="field" data-label="3. Manewry (skręt do oporu, kamera, Auto Hold)">
+      <div class="q-row"><span class="label">Skręt kół do oporu w obie strony bez stuków/przeskoków (przeguby). Kamera/czujniki, hamulec elektryczny i Auto Hold działają<span class="hint">Jadąc bardzo wolno z kołami skręconymi do oporu nasłuchuj rytmicznego „klik-klik” / chrupania — to zużyte przeguby napędowe (homokinetyczne).</span></span>
+        <span class="seg"><input type="radio" name="jp3" id="jp3_ok" value="OK"><label for="jp3_ok" data-v="OK">OK</label><input type="radio" name="jp3" id="jp3_uw" value="Uwaga"><label for="jp3_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp3" id="jp3_zl" value="Źle"><label for="jp3_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="4. Pierwsze lekkie hamowania">
+      <div class="q-row"><span class="label">Bez pisków, bez bicia na pedale, bez ściągania</span>
+        <span class="seg"><input type="radio" name="jp4" id="jp4_ok" value="OK"><label for="jp4_ok" data-v="OK">OK</label><input type="radio" name="jp4" id="jp4_uw" value="Uwaga"><label for="jp4_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp4" id="jp4_zl" value="Źle"><label for="jp4_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="5. Miasto stop-and-go (DSG, START/STOP, geometria)">
+      <div class="q-row"><span class="label">DSG w korku kulturalne, START/STOP gasi i płynnie wznawia, kierownica jedzie prosto (geometria), brak luzów</span>
+        <span class="seg"><input type="radio" name="jp5" id="jp5_ok" value="OK"><label for="jp5_ok" data-v="OK">OK</label><input type="radio" name="jp5" id="jp5_uw" value="Uwaga"><label for="jp5_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp5" id="jp5_zl" value="Źle"><label for="jp5_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="6. Zawieszenie na nierównościach / progach">
+      <div class="q-row"><span class="label">Brak stuków/klekotów, dobre tłumienie, auto trzyma równo</span>
+        <span class="seg"><input type="radio" name="jp6" id="jp6_ok" value="OK"><label for="jp6_ok" data-v="OK">OK</label><input type="radio" name="jp6" id="jp6_uw" value="Uwaga"><label for="jp6_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp6" id="jp6_zl" value="Źle"><label for="jp6_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="7. Przyspieszenie pełnym gazem (bezpiecznie)">
+      <div class="q-row"><span class="label">Kickdown szybki, brak dziur/utraty mocy, brak czarnego dymu, turbo bez świstu, DSG bez szarpania przy redukcji</span>
+        <span class="seg"><input type="radio" name="jp7" id="jp7_ok" value="OK"><label for="jp7_ok" data-v="OK">OK</label><input type="radio" name="jp7" id="jp7_uw" value="Uwaga"><label for="jp7_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp7" id="jp7_zl" value="Źle"><label for="jp7_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="8. Obwodnica 90–120 km/h (stabilność, drgania, łożyska)">
+      <div class="q-row"><span class="label">Stabilność, brak drgań kierownicy, brak buczenia łożysk (lekka zmiana toru L/P), brak szumów/świstu uszczelek<span class="hint">Buczenie/wycie narastające z prędkością to zwykle łożysko koła — delikatnie zmieniaj tor jazdy (lekko w lewo/prawo): jeśli dźwięk cichnie lub się nasila, potwierdza łożysko. Drgania kierownicy przy stałej prędkości = wyważenie/koła/tarcze.</span></span>
+        <span class="seg"><input type="radio" name="jp8" id="jp8_ok" value="OK"><label for="jp8_ok" data-v="OK">OK</label><input type="radio" name="jp8" id="jp8_uw" value="Uwaga"><label for="jp8_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp8" id="jp8_zl" value="Źle"><label for="jp8_zl" data-v="Źle">Źle</label></span></div>
+      <input type="number" inputmode="numeric" data-tag="drganie_predkosc" placeholder="Przy jakiej prędkości drganie? (km/h)">
+    </div>
+    <div class="field" data-label="9a. TEST ACC — adaptacyjny tempomat (kluczowe!)">
+      <div class="q-row"><span class="label">Włącz tempomat i sprawdź, czy realnie utrzymuje odległość od auta z przodu<span class="hint">Ogłoszenie reklamuje „asystent odległości”, a specyfikacja z VIN tego NIE potwierdza.</span></span>
+        <span class="seg"><input type="radio" name="acc" id="acc_ok" value="Działa"><label for="acc_ok" data-v="OK">Działa</label><input type="radio" name="acc" id="acc_uw" value="Jest tylko zwykły tempomat"><label for="acc_uw" data-v="Uwaga">Zwykły</label><input type="radio" name="acc" id="acc_zl" value="Brak"><label for="acc_zl" data-v="Źle">Brak</label></span></div>
+    </div>
+    <div class="field" data-label="9b. Asystent pasa ruchu (wg VIN brak)">
+      <div class="q-row"><span class="label">Czy aktywnie trzyma w pasie?<span class="hint">Na pustej, oznakowanej drodze z włączoną funkcją pozwól autu lekko zbliżyć się do linii — powinno samo delikatnie skręcić do środka pasa. Rób to bardzo ostrożnie, trzymając ręce przy kierownicy.</span></span>
+        <span class="seg"><input type="radio" name="lka" id="lka_ok" value="Jest"><label for="lka_ok" data-v="OK">Jest</label><input type="radio" name="lka" id="lka_uw" value="Brak"><label for="lka_uw" data-v="Uwaga">Brak</label></span></div>
+    </div>
+    <div class="field" data-label="9c. Typ świateł (Matrix vs LED Basic) + doświetlanie zakrętów">
+      <input type="text" data-tag="swiatla_typ" placeholder="Matrix / LED Basic?">
+      <div class="q-row" style="margin-top:8px"><span class="label">Doświetlanie zakrętów działa<span class="hint">Po zmroku lub w cieniu (np. hala/parking) skręć kierownicą na postoju lub w wolnym zakręcie — dodatkowy strumień światła powinien doświetlić wnętrze zakrętu.</span></span>
+        <span class="seg"><input type="radio" name="zakrety" id="zakrety_ok" value="OK"><label for="zakrety_ok" data-v="OK">Tak</label><input type="radio" name="zakrety" id="zakrety_uw" value="Uwaga"><label for="zakrety_uw" data-v="Uwaga">Nie/Brak</label></span></div>
+    </div>
+    <div class="field" data-label="10. Hamowanie mocniejsze / awaryjne (bezpiecznie)">
+      <div class="q-row"><span class="label">Równo, ABS pracuje, brak wibracji (tarcze)</span>
+        <span class="seg"><input type="radio" name="jp10" id="jp10_ok" value="OK"><label for="jp10_ok" data-v="OK">OK</label><input type="radio" name="jp10" id="jp10_uw" value="Uwaga"><label for="jp10_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp10" id="jp10_zl" value="Źle"><label for="jp10_zl" data-v="Źle">Źle</label></span></div>
+    </div>
+    <div class="field" data-label="11. Po zjeździe, silnik pracuje (wycieki, dym, kontrolki)">
+      <div class="q-row"><span class="label">Świeże wycieki pod spodem/maską, dym przy gazowaniu na postoju, kontrolki po przejażdżce (regeneracja DPF?), temperatura stabilna, klima chłodzi szybko bez zapachu</span>
+        <span class="seg"><input type="radio" name="jp11" id="jp11_ok" value="OK"><label for="jp11_ok" data-v="OK">OK</label><input type="radio" name="jp11" id="jp11_uw" value="Uwaga"><label for="jp11_uw" data-v="Uwaga">Uwaga</label><input type="radio" name="jp11" id="jp11_zl" value="Źle"><label for="jp11_zl" data-v="Źle">Źle</label></span></div>
+      <textarea class="note" data-tag="notatka" placeholder="Wrażenia z jazdy, cokolwiek niepokojącego…"></textarea>
     </div>
   </section>
 
-  <section data-title="10. Negocjacje i decyzja">
-    <div class="sec-head"><span class="num">10</span><h3>Negocjacje i decyzja</h3></div>
+  <section data-title="3. Podsumowanie i decyzja">
+    <div class="sec-head"><span class="num">03</span><h3>Podsumowanie i decyzja</h3></div>
+
+    <div class="field" data-label="Argumenty do ceny (zaznacz, co dotyczy)">
+      <div class="checks">
+        <label class="chk"><input type="checkbox" data-tag="argument" value="Podstawowy Style (uboga wersja)"> Podstawowy Style (uboga wersja)</label>
+        <label class="chk"><input type="checkbox" data-tag="argument" value="3. właściciel / ex-firma"> 3. właściciel / ex-firma</label>
+        <label class="chk"><input type="checkbox" data-tag="argument" value="Serwis poza ASO"> Serwis poza ASO</label>
+        <label class="chk"><input type="checkbox" data-tag="argument" value="Olej DSG do zrobienia"> Olej DSG do zrobienia</label>
+        <label class="chk"><input type="checkbox" data-tag="argument" value="Gotówka od ręki"> Gotówka od ręki</label>
+      </div>
+    </div>
     <div class="field" data-label="Cena po negocjacji (zł)">
       <div class="grid2"><input type="number" inputmode="numeric" data-tag="cena_docelowa" placeholder="Twój cel (zł)"><input type="number" inputmode="numeric" data-tag="cena_uzyskana" placeholder="Uzgodniona (zł)"></div>
       <p class="mini">Odniesienie: średnia rynkowa 105 972 zł · mediana FWD ~99 550 zł · ogłoszenie 97 000 zł.</p>
     </div>
     <div class="field" data-label="Ogólne wrażenie">
       <div class="q-row"><span class="label">Jak auto wypadło ogółem?</span>
-        <span class="seg"><input type="radio" name="wraz" id="wr1" value="Bardzo dobre"><label for="wr1" data-v="OK">Dobre</label><input type="radio" name="wraz" id="wr2" value="Mieszane"><label for="wr2" data-v="Uwaga">Mieszane</label><input type="radio" name="wraz" id="wr3" value="Słabe"><label for="wr3" data-v="Źle">Słabe</label></span></div>
+        <span class="seg"><input type="radio" name="wraz" id="wraz_ok" value="Dobre"><label for="wraz_ok" data-v="OK">Dobre</label><input type="radio" name="wraz" id="wraz_uw" value="Mieszane"><label for="wraz_uw" data-v="Uwaga">Mieszane</label><input type="radio" name="wraz" id="wraz_zl" value="Słabe"><label for="wraz_zl" data-v="Źle">Słabe</label></span></div>
     </div>
     <div class="field" data-label="Wstępna decyzja">
       <div class="q-row"><span class="label">Twoja pierwsza myśl</span>
-        <span class="seg"><input type="radio" name="dec" id="de1" value="Kupuję"><label for="de1" data-v="OK">Kupuję</label><input type="radio" name="dec" id="de2" value="Do przemyślenia"><label for="de2" data-v="Uwaga">Myślę</label><input type="radio" name="dec" id="de3" value="Odpuszczam"><label for="de3" data-v="Źle">Odpuszczam</label></span></div>
+        <span class="seg"><input type="radio" name="dec" id="dec_ok" value="Kupuję"><label for="dec_ok" data-v="OK">Kupuję</label><input type="radio" name="dec" id="dec_uw" value="Myślę"><label for="dec_uw" data-v="Uwaga">Myślę</label><input type="radio" name="dec" id="dec_zl" value="Odpuszczam"><label for="dec_zl" data-v="Źle">Odpuszczam</label></span></div>
     </div>
     <div class="field" data-label="Notatki końcowe">
       <textarea data-tag="podsumowanie" placeholder="Cokolwiek, co pomoże podjąć decyzję…" style="min-height:80px"></textarea>
@@ -398,14 +431,16 @@
 
 <script>
 (function(){
-  var OFFICIAL_ODO=46089, LISTING_ODO=49800, STORAGE_KEY='ogledziny-skoda-superb-v2';
+  var OFFICIAL_ODO=46089, LISTING_ODO=49800, STORAGE_KEY='ogledziny-skoda-superb-v3';
   function textFields(){return document.querySelectorAll('input[type=text],input[type=number],input[type=date],input[type=time],textarea');}
+  function checkFields(){return document.querySelectorAll('input[type=checkbox]');}
 
   function saveState(){
     try{
-      var s={radios:{},fields:{}}, i=0;
+      var s={radios:{},fields:{},checks:{}}, i=0, j=0;
       document.querySelectorAll('input[type=radio]:checked').forEach(function(r){s.radios[r.name]=r.id;});
       textFields().forEach(function(t){s.fields['f'+i]=t.value;i++;});
+      checkFields().forEach(function(c){s.checks['c'+j]=c.checked;j++;});
       localStorage.setItem(STORAGE_KEY,JSON.stringify(s));
       var m=document.getElementById('barMeta'); m.textContent='Zapisano roboczo ✓';
     }catch(e){}
@@ -413,9 +448,10 @@
   function loadState(){
     try{
       var raw=localStorage.getItem(STORAGE_KEY); if(!raw) return;
-      var s=JSON.parse(raw), i=0;
+      var s=JSON.parse(raw), i=0, j=0;
       Object.keys(s.radios||{}).forEach(function(n){var el=document.getElementById(s.radios[n]); if(el) el.checked=true;});
       textFields().forEach(function(t){if(s.fields&&s.fields['f'+i]!=null)t.value=s.fields['f'+i];i++;});
+      checkFields().forEach(function(c){if(s.checks&&s.checks['c'+j]!=null)c.checked=s.checks['c'+j];j++;});
       document.getElementById('barMeta').textContent='Wczytano zapis roboczy ✓';
     }catch(e){}
   }
@@ -435,6 +471,9 @@
         f.querySelectorAll('input[type=text],input[type=number],input[type=date],input[type=time],textarea').forEach(function(t){
           var v=(t.value||'').trim(); if(v){var tag=t.getAttribute('data-tag'); parts.push((tag?tag.replace(/_/g,' ')+': ':'')+v);}
         });
+        var chks=[];
+        f.querySelectorAll('input[type=checkbox]:checked').forEach(function(c){chks.push(c.value);});
+        if(chks.length) parts.push(chks.join(', '));
         lines.push("- "+label+": "+(parts.length?parts.join('  |  '):'—'));
       });
     });
@@ -445,10 +484,12 @@
       else if(odo<LISTING_ODO-1500) flags.push(['amber','Licznik ('+odo.toLocaleString('pl-PL')+' km) wyraznie ponizej deklarowanych ~49 800 km — dopytaj.']);
       else flags.push(['green','Licznik ('+odo.toLocaleString('pl-PL')+' km) spojny z historia (>= 46 089 km).']);
     } else flags.push(['amber','Brak odczytu licznika — najwazniejsza pozycja, uzupelnij.']);
-    document.querySelectorAll('.paint').forEach(function(p){var v=parseInt(p.value,10); if(!isNaN(v)&&v>=200) flags.push(['amber','Lakier '+(p.getAttribute('data-tag')||'').replace('µm_','').replace(/_/g,' ')+': '+v+' µm — prawdopodobne lakierowanie.']);});
+    var acc=document.querySelector('input[name=acc]:checked');
+    if(acc&&acc.value!=='Działa') flags.push(['amber','ACC reklamowany w ogloszeniu, a w aucie nieobecny/ograniczony ('+acc.value+') — argument do negocjacji.']);
     document.querySelectorAll('.field').forEach(function(f){
       var seg=f.querySelector('.seg'); if(!seg) return;
       var c=seg.querySelector('input:checked'); if(!c) return;
+      if(c.name==='acc') return; // ACC ma wlasna, dedykowana flage powyzej
       var lbl=seg.querySelector('input:checked + label'), v=lbl?lbl.getAttribute('data-v'):'', label=f.getAttribute('data-label')||'';
       if(v==='Źle') flags.push(['red','„'+label+'” — problem ('+c.value+').']);
       else if(v==='Uwaga') flags.push(['amber','„'+label+'” — do sprawdzenia ('+c.value+').']);
