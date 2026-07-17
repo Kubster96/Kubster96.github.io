@@ -111,7 +111,7 @@
 <div class="wrap">
 <header class="top">
   <h1>Handshake — Scenariusze testowe E2E</h1>
-  <p class="sub">Ścieżka: klient z notatką → AI tworzy nieruchomość → poszukiwanie kupującego → kubełki Potencjalne / Procesowane / Pozyskane → scoring i statusy dopasowań.</p>
+  <p class="sub">Ścieżka: klient z notatką → AI tworzy nieruchomość → poszukiwanie kupującego → kategorie Potencjalne / Procesowane / Pozyskane → scoring i statusy dopasowań.</p>
   <div class="bar-row">
     <div class="progress" title="Ukończone kroki"><span id="barFill"></span></div>
     <span class="pcount" id="barCount">0 / 0</span>
@@ -128,12 +128,12 @@
 
 <div class="intro">
   <h2>Zanim zaczniesz — środowisko i jak działa system</h2>
-  <div class="callout crit"><strong>Wymóg dla kroków AI:</strong> przepływ „AI tworzy nieruchomość" wymaga działającego LLM (klucz Anthropic) oraz uruchomionego workera zadań w tle: <code>python manage.py process_tasks</code>. Bez tego zadanie AI nie wykona się i nieruchomość nie powstanie. Nie ma trybu offline — <code>seed_ai_notes_customers</code> tylko sieje dane.</div>
-  <div class="callout"><strong>Kubełki zależą od statusu nieruchomości, nie od statusu dopasowania.</strong> Dopasowania liczone są na żywo przy każdym otwarciu szczegółów poszukiwania — po każdej zmianie po prostu odśwież stronę poszukiwania.</div>
+  <div class="callout crit"><strong>Wymóg dla kroków AI:</strong> przepływ „AI tworzy nieruchomość" wymaga działającego LLM (klucz Anthropic). Zadanie AI przetwarzane jest w tle — po jego wykonaniu nieruchomość się pojawia. Nie ma trybu offline — <code>seed_ai_notes_customers</code> tylko sieje dane.</div>
+  <div class="callout"><strong>Kategorie zależą od statusu nieruchomości, nie od statusu dopasowania.</strong> Dopasowania liczone są na żywo przy każdym otwarciu szczegółów poszukiwania — po każdej zmianie po prostu odśwież stronę poszukiwania.</div>
   <details>
-    <summary>Mapa statusów → kubełki oraz zasady dopasowania</summary>
+    <summary>Mapa statusów → kategorie oraz zasady dopasowania</summary>
     <table>
-      <tr><th>Kubełek</th><th>Statusy nieruchomości</th><th>Filtr ceny</th></tr>
+      <tr><th>Kategoria</th><th>Statusy nieruchomości</th><th>Filtr ceny</th></tr>
       <tr><td>Potencjalne</td><td>Potencjalna</td><td>pomijany</td></tr>
       <tr><td>Procesowane</td><td>Zamrożona, Przed Pierwszym Kontaktem, Follow Up Po Telefonie, Umówiono Na Pozyskanie, Pozyskanie Odbyte, Follow Up Po Pozyskaniu</td><td>stosowany</td></tr>
       <tr><td>Pozyskane</td><td>Fotograf Do Umówienia, Oczekiwanie Na Zdjęcia, Oferta W Przygotowaniu, Oferta Aktywna</td><td>stosowany</td></tr>
@@ -143,7 +143,7 @@
       <li><strong>Kwalifikacja:</strong> zgodność typu → obszar/promień (geo) → twarde filtry FETCHING. Brak wartości na nieruchomości = odrzucenie kryterium (wyjątek: cena).</li>
       <li><strong>Filtr ceny:</strong> pomijany w „Potencjalne"; w pozostałych: cena ≤ budżet + bufor (25 tys. działka/lokal, 100 tys. budynki, 0 lokal komercyjny). Nieruchomość bez ceny zawsze przechodzi filtr ceny.</li>
       <li><strong>Scoring:</strong> tylko kryteria SCORING ustawione przez kupującego, równe wagi. Brakujące pole nieruchomości = 0 pkt dla tego kryterium — dlatego uzupełnianie pól i pozyskanie podnoszą wynik.</li>
-      <li><strong>Status dopasowania</strong> (Nowy/Wysłany/Zainteresowany/Niezainteresowany/Nie dotyczy) jest niezależny od kubełka — służy sortowaniu/ukrywaniu w obrębie kubełka.</li>
+      <li><strong>Status dopasowania</strong> (Nowy/Wysłany/Zainteresowany/Niezainteresowany/Nie dotyczy) jest niezależny od kategorii — służy sortowaniu/ukrywaniu w obrębie kategorii.</li>
     </ul>
   </details>
 </div>
@@ -162,12 +162,12 @@ const SCENARIOS = [
   {
     title: "AI: klient z notatką → auto-utworzenie nieruchomości (wysoka pewność)",
     goal: "Notatka o nieruchomości u klienta bez aktywnych nieruchomości powinna po syncu AI utworzyć nieruchomość „Potencjalna”.",
-    pre: "Klient nowy lub bez aktywnych nieruchomości. LLM włączony, działa process_tasks.",
+    pre: "Klient nowy lub bez aktywnych nieruchomości. LLM włączony.",
     steps: [
       "Dodaj klienta (unikalny numer telefonu).",
       "Dodaj do klienta notatkę/update (≥20 znaków) opisującą nieruchomość na sprzedaż: typ, adres/miasto, powierzchnia, cena, liczba pokoi.",
       "Na karcie klienta kliknij „Dodaj nieruchomość z AI” (widoczne, gdy klient jest eligible).",
-      "Uruchom / poczekaj na process_tasks aż zadanie się wykona.",
+      "Poczekaj, aż zadanie AI wykona się w tle.",
       "Odśwież kartę klienta i sprawdź panel „Analiza AI”."
     ],
     expect: [
@@ -182,7 +182,7 @@ const SCENARIOS = [
     pre: "Klient z mniej jednoznaczną notatką (niepełny opis nieruchomości).",
     steps: [
       "Dodaj klienta z notatką opisującą nieruchomość, ale z brakami (np. bez ceny lub bez powierzchni).",
-      "Uruchom AI sync i process_tasks.",
+      "Uruchom AI sync i poczekaj, aż zadanie wykona się w tle.",
       "Wejdź w „Propozycje nieruchomości” (menu agenta).",
       "Zaakceptuj propozycję dla tego klienta.",
       "Dla innej propozycji użyj „Odrzuć”."
@@ -210,7 +210,7 @@ const SCENARIOS = [
     ]
   },
   {
-    title: "Kupujący + poszukiwanie → nieruchomość AI w kubełku „Potencjalne”",
+    title: "Kupujący + poszukiwanie → nieruchomość AI w kategorii „Potencjalne”",
     goal: "Poszukiwanie kupującego obejmujące lokalizację nieruchomości AI powinno pokazać ją w „Potencjalne”.",
     pre: "Istnieje nieruchomość „Potencjalna” (ze scenariusza 1). Znasz jej adres/typ.",
     steps: [
@@ -221,7 +221,7 @@ const SCENARIOS = [
       "Otwórz szczegóły poszukiwania → „Pasujące nieruchomości” → zakładka „Potencjalne”."
     ],
     expect: [
-      "Nieruchomość AI jest widoczna w kubełku „Potencjalne”.",
+      "Nieruchomość AI jest widoczna w kategorii „Potencjalne”.",
       "Filtr ceny jest pomijany (potencjalna pokaże się nawet ponad budżet).",
       "Zanotuj bieżący scoring nieruchomości (matched / total oraz %)."
     ]
@@ -255,13 +255,13 @@ const SCENARIOS = [
     expect: [
       "Scoring (matched/total i %) rośnie dokładnie o uzupełnione, pasujące kryteria.",
       "Pola pozostające puste dalej dają 0 pkt dla swojego kryterium.",
-      "Kubełek się nie zmienia (dalej „Procesowane”) — scoring nie wpływa na kubełek."
+      "Kategoria się nie zmienia (dalej „Procesowane”) — scoring nie wpływa na kategorię."
     ]
   },
   {
     title: "Status dopasowania i notatki dopasowania (per-match)",
-    goal: "Agent może ustawić status dopasowania i dodać notatki na karcie dopasowania — niezależnie od kubełka.",
-    pre: "Nieruchomość widoczna w dowolnym kubełku poszukiwania.",
+    goal: "Agent może ustawić status dopasowania i dodać notatki na karcie dopasowania — niezależnie od kategorii.",
+    pre: "Nieruchomość widoczna w dowolnej kategorii poszukiwania.",
     steps: [
       "Na karcie dopasowania ustaw „Status dopasowania” = Wysłany, potem Zainteresowany.",
       "Dodaj notatkę do dopasowania.",
@@ -271,13 +271,13 @@ const SCENARIOS = [
     expect: [
       "Status i notatki zapisują się (rekord dopasowania tworzony leniwie), wpis w AuditLog.",
       "„Niezainteresowany”/„Nie dotyczy” domyślnie ukrywa dopasowanie; przełącznik je pokazuje.",
-      "Zmiana statusu dopasowania NIE zmienia kubełka (kubełek zależy od statusu nieruchomości)."
+      "Zmiana statusu dopasowania NIE zmienia kategorii (kategoria zależy od statusu nieruchomości)."
     ]
   },
   {
     title: "Pozyskanie: „Umówiono Na Pozyskanie” → „Fotograf Do Umówienia” wymusza komplet pól",
     goal: "Podpisanie umowy przy pozyskaniu wymaga uzupełnienia wszystkich wymaganych pól nieruchomości (dla lokalu ~38 pól).",
-    pre: "Nieruchomość w statusie „Umówiono Na Pozyskanie” (kubełek „Procesowane”).",
+    pre: "Nieruchomość w statusie „Umówiono Na Pozyskanie” (kategoria „Procesowane”).",
     steps: [
       "Otwórz modal zmiany statusu nieruchomości.",
       "„Czy spotkanie się odbyło?” = Tak → „Czy podpisano umowę?” = Tak.",
@@ -309,7 +309,7 @@ const SCENARIOS = [
   },
   {
     title: "Dalsza ścieżka „Pozyskane”: fotograf → zdjęcia → oferta",
-    goal: "Nieruchomość przechodzi kolejne statusy pozyskane, pozostając w kubełku „Pozyskane”.",
+    goal: "Nieruchomość przechodzi kolejne statusy pozyskane, pozostając w kategorii „Pozyskane”.",
     pre: "Nieruchomość w statusie „Fotograf Do Umówienia”.",
     steps: [
       "„Fotograf Do Umówienia” → „Oczekiwanie Na Zdjęcia” (podaj datę fotografa).",
@@ -320,8 +320,8 @@ const SCENARIOS = [
     ],
     expect: [
       "Przejście do „Oferta W Przygotowaniu” wymaga min. 3 zdjęć — mniej = błąd.",
-      "Na każdym etapie nieruchomość pozostaje w kubełku „Pozyskane”.",
-      "Po finalizacji („Sfinalizowana”) nieruchomość wypada ze wszystkich trzech kubełków (trafia do „Archiwum”, jeśli dopasowanie było dotknięte)."
+      "Na każdym etapie nieruchomość pozostaje w kategorii „Pozyskane”.",
+      "Po finalizacji („Sfinalizowana”) nieruchomość wypada ze wszystkich trzech kategorii (trafia do „Archiwum”, jeśli dopasowanie było dotknięte)."
     ]
   },
   {
@@ -330,13 +330,13 @@ const SCENARIOS = [
     pre: "Nieruchomość z poprawnie zgeokodowanym adresem (lat/lon).",
     steps: [
       "Utwórz poszukiwanie z małym promieniem NIE obejmującym adresu nieruchomości.",
-      "Otwórz szczegóły → sprawdź kubełki.",
+      "Otwórz szczegóły → sprawdź kategorie.",
       "Zwiększ promień lub ustaw obszar tak, by objąć adres.",
       "Odśwież i sprawdź ponownie."
     ],
     expect: [
-      "Przy małym promieniu nieruchomość nie pojawia się w żadnym kubełku.",
-      "Po objęciu adresu nieruchomość pojawia się w odpowiednim kubełku.",
+      "Przy małym promieniu nieruchomość nie pojawia się w żadnej kategorii.",
+      "Po objęciu adresu nieruchomość pojawia się w odpowiedniej kategorii.",
       "Nieruchomość bez lat/lon (nieudane geokodowanie) nie pasuje do żadnego poszukiwania."
     ]
   },
@@ -345,9 +345,9 @@ const SCENARIOS = [
     goal: "Twarde filtry FETCHING odrzucają nieruchomości z brakującą wartością (poza ceną); filtr ceny działa różnie w Potencjalne vs pozostałych.",
     pre: "Nieruchomość i poszukiwanie tego samego typu, ta sama lokalizacja.",
     steps: [
-      "W poszukiwaniu ustaw kryterium FETCHING (np. liczba pokoi 3–4) i sprawdź kubełek Potencjalne, gdy nieruchomość NIE ma liczby pokoi.",
+      "W poszukiwaniu ustaw kryterium FETCHING (np. liczba pokoi 3–4) i sprawdź kategorię Potencjalne, gdy nieruchomość NIE ma liczby pokoi.",
       "Uzupełnij liczbę pokoi w nieruchomości w zakresie i odśwież.",
-      "Ustaw nieruchomości cenę powyżej budżetu kupującego (o więcej niż bufor) i sprawdź kubełek Potencjalne.",
+      "Ustaw nieruchomości cenę powyżej budżetu kupującego (o więcej niż bufor) i sprawdź kategorię Potencjalne.",
       "Wciągnij nieruchomość do procesu (Procesowane) i odśwież."
     ],
     expect: [
