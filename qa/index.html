@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Handshake — Scenariusze testowe E2E</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#ffffff; --ink:#1f2430; --muted:#5b6472; --line:#e3e6ea;
+    --brand:#c2410c; --brand-soft:#fde6da; --ok:#15803d; --ok-soft:#dcfce7;
+    --err:#b91c1c; --err-soft:#fee2e2; --warn:#a16207; --warn-soft:#fef9c3;
+    --blocked:#6b21a8; --blocked-soft:#f3e8ff; --accent:#0f172a;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1117; --card:#161b22; --ink:#e6edf3; --muted:#9aa4b2; --line:#2a313c;
+      --brand:#fb923c; --brand-soft:#3a2415; --ok:#4ade80; --ok-soft:#12331f;
+      --err:#f87171; --err-soft:#3a1a1a; --warn:#facc15; --warn-soft:#33300f;
+      --blocked:#c084fc; --blocked-soft:#2a1839; --accent:#e6edf3;
+      --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0e1117; --card:#161b22; --ink:#e6edf3; --muted:#9aa4b2; --line:#2a313c;
+    --brand:#fb923c; --brand-soft:#3a2415; --ok:#4ade80; --ok-soft:#12331f;
+    --err:#f87171; --err-soft:#3a1a1a; --warn:#facc15; --warn-soft:#33300f;
+    --blocked:#c084fc; --blocked-soft:#2a1839; --accent:#e6edf3;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f5f7; --card:#ffffff; --ink:#1f2430; --muted:#5b6472; --line:#e3e6ea;
+    --brand:#c2410c; --brand-soft:#fde6da; --ok:#15803d; --ok-soft:#dcfce7;
+    --err:#b91c1c; --err-soft:#fee2e2; --warn:#a16207; --warn-soft:#fef9c3;
+    --blocked:#6b21a8; --blocked-soft:#f3e8ff; --accent:#0f172a;
+    --shadow:0 1px 2px rgba(0,0,0,.05),0 4px 12px rgba(0,0,0,.05);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:20px 16px 80px}
+  header.top{position:sticky;top:0;z-index:20;background:var(--bg);
+    padding:14px 0 10px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  h1{font-size:1.5rem;margin:0 0 2px}
+  .sub{color:var(--muted);font-size:.92rem;margin:0}
+  .bar-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .progress{flex:1;min-width:180px;height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+  .progress>span{display:block;height:100%;width:0;background:var(--brand);transition:width .25s ease}
+  .pcount{font-variant-numeric:tabular-nums;font-weight:600;font-size:.9rem;white-space:nowrap}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  button.act{cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);
+    border-radius:8px;padding:7px 12px;font-size:.85rem;font-weight:500}
+  button.act:hover{border-color:var(--brand);color:var(--brand)}
+  .intro{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;margin-bottom:18px;box-shadow:var(--shadow)}
+  .intro h2{font-size:1rem;margin:0 0 8px}
+  .intro details{margin-top:8px}
+  .intro summary{cursor:pointer;font-weight:600;color:var(--brand)}
+  .intro table{border-collapse:collapse;width:100%;margin:10px 0;font-size:.85rem;display:block;overflow-x:auto}
+  .intro th,.intro td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top;white-space:nowrap}
+  .intro th{background:var(--brand-soft);color:var(--brand)}
+  .callout{border-left:4px solid var(--warn);background:var(--warn-soft);border-radius:6px;
+    padding:10px 12px;margin:10px 0;font-size:.86rem}
+  .callout.crit{border-left-color:var(--err);background:var(--err-soft)}
+  code{background:var(--line);padding:1px 5px;border-radius:5px;font-size:.85em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;
+    margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+  .card.done{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+  .card.fail{border-color:color-mix(in srgb,var(--err) 45%,var(--line))}
+  .chead{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+  .cnum{flex:0 0 auto;width:30px;height:30px;border-radius:8px;background:var(--brand-soft);color:var(--brand);
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem}
+  .ctitle{flex:1;min-width:0}
+  .ctitle h3{margin:0;font-size:1.02rem}
+  .ctitle .goal{color:var(--muted);font-size:.86rem;margin-top:2px}
+  .cmeta{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+  .chip{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap;letter-spacing:.02em}
+  .chip.todo{background:var(--line);color:var(--muted)}
+  .chip.wip{background:var(--brand-soft);color:var(--brand)}
+  .chip.pass{background:var(--ok-soft);color:var(--ok)}
+  .chip.fail{background:var(--err-soft);color:var(--err)}
+  .chip.blocked{background:var(--blocked-soft);color:var(--blocked)}
+  .cstepcount{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .cbody{padding:0 16px 16px;border-top:1px solid var(--line);display:none}
+  .card.open .cbody{display:block}
+  .card.open .chead{border-bottom:0}
+  .sec{margin-top:14px}
+  .sec .lab{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;margin-bottom:6px}
+  .pre{background:var(--brand-soft);color:var(--brand);border-radius:8px;padding:8px 11px;font-size:.85rem}
+  ul.steps{list-style:none;margin:0;padding:0}
+  ul.steps li{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px dashed var(--line)}
+  ul.steps li:last-child{border-bottom:0}
+  ul.steps input[type=checkbox]{margin-top:3px;width:18px;height:18px;flex:0 0 auto;accent-color:var(--brand);cursor:pointer}
+  ul.steps label{cursor:pointer;font-size:.9rem}
+  ul.steps li.checked label{color:var(--muted);text-decoration:line-through}
+  .expect{background:var(--ok-soft);border-radius:8px;padding:8px 11px;font-size:.85rem}
+  .expect ul{margin:4px 0 0;padding-left:18px}
+  .expect li{margin:2px 0}
+  .verdict{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .verdict label{font-size:.8rem;border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;display:flex;align-items:center;gap:5px}
+  .verdict input{accent-color:var(--brand)}
+  textarea.note{width:100%;margin-top:6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);
+    color:var(--ink);padding:8px 10px;font:inherit;font-size:.85rem;resize:vertical;min-height:44px}
+  footer{text-align:center;color:var(--muted);font-size:.8rem;margin-top:26px}
+  .themebtn{position:fixed;bottom:16px;right:16px;z-index:30}
+  input[type=file]{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>Handshake — Scenariusze testowe E2E</h1>
+  <p class="sub">Ścieżka: klient z notatką → AI tworzy nieruchomość → poszukiwanie kupującego → kubełki Potencjalne / Procesowane / Pozyskane → scoring i statusy dopasowań.</p>
+  <div class="bar-row">
+    <div class="progress" title="Ukończone kroki"><span id="barFill"></span></div>
+    <span class="pcount" id="barCount">0 / 0</span>
+    <div class="btns">
+      <button class="act" id="expandAll">Rozwiń</button>
+      <button class="act" id="collapseAll">Zwiń</button>
+      <button class="act" id="exportBtn">Eksport</button>
+      <button class="act" id="importBtn">Import</button>
+      <button class="act" id="resetBtn">Reset</button>
+      <input type="file" id="importFile" accept="application/json">
+    </div>
+  </div>
+</header>
+
+<div class="intro">
+  <h2>Zanim zaczniesz — środowisko i jak działa system</h2>
+  <div class="callout crit"><strong>Wymóg dla kroków AI:</strong> przepływ „AI tworzy nieruchomość" wymaga działającego LLM (klucz Anthropic) oraz uruchomionego workera zadań w tle: <code>python manage.py process_tasks</code>. Bez tego zadanie AI nie wykona się i nieruchomość nie powstanie. Nie ma trybu offline — <code>seed_ai_notes_customers</code> tylko sieje dane.</div>
+  <div class="callout"><strong>Kubełki zależą od statusu nieruchomości, nie od statusu dopasowania.</strong> Dopasowania liczone są na żywo przy każdym otwarciu szczegółów poszukiwania — po każdej zmianie po prostu odśwież stronę poszukiwania.</div>
+  <details>
+    <summary>Mapa statusów → kubełki oraz zasady dopasowania</summary>
+    <table>
+      <tr><th>Kubełek</th><th>Statusy nieruchomości</th><th>Filtr ceny</th></tr>
+      <tr><td>Potencjalne</td><td>Potencjalna</td><td>pomijany</td></tr>
+      <tr><td>Procesowane</td><td>Zamrożona, Przed Pierwszym Kontaktem, Follow Up Po Telefonie, Umówiono Na Pozyskanie, Pozyskanie Odbyte, Follow Up Po Pozyskaniu</td><td>stosowany</td></tr>
+      <tr><td>Pozyskane</td><td>Fotograf Do Umówienia, Oczekiwanie Na Zdjęcia, Oferta W Przygotowaniu, Oferta Aktywna</td><td>stosowany</td></tr>
+      <tr><td>Archiwum</td><td>Sfinalizowana / zrezygnowana (jeśli dopasowanie było dotknięte)</td><td>—</td></tr>
+    </table>
+    <ul style="font-size:.85rem;margin:6px 0 0;padding-left:18px">
+      <li><strong>Kwalifikacja:</strong> zgodność typu → obszar/promień (geo) → twarde filtry FETCHING. Brak wartości na nieruchomości = odrzucenie kryterium (wyjątek: cena).</li>
+      <li><strong>Filtr ceny:</strong> pomijany w „Potencjalne"; w pozostałych: cena ≤ budżet + bufor (25 tys. działka/lokal, 100 tys. budynki, 0 lokal komercyjny). Nieruchomość bez ceny zawsze przechodzi filtr ceny.</li>
+      <li><strong>Scoring:</strong> tylko kryteria SCORING ustawione przez kupującego, równe wagi. Brakujące pole nieruchomości = 0 pkt dla tego kryterium — dlatego uzupełnianie pól i pozyskanie podnoszą wynik.</li>
+      <li><strong>Status dopasowania</strong> (Nowy/Wysłany/Zainteresowany/Niezainteresowany/Nie dotyczy) jest niezależny od kubełka — służy sortowaniu/ukrywaniu w obrębie kubełka.</li>
+    </ul>
+  </details>
+</div>
+
+<div id="scenarios"></div>
+
+<footer>
+  Stan zapisywany automatycznie w tej przeglądarce (localStorage). Użyj „Eksport"/„Import", by przenieść wyniki między przeglądarkami. <span id="savedAt"></span>
+</footer>
+</div>
+
+<button class="act themebtn" id="themeBtn" title="Przełącz motyw">◑ Motyw</button>
+
+<script>
+const SCENARIOS = [
+  {
+    title: "AI: klient z notatką → auto-utworzenie nieruchomości (wysoka pewność)",
+    goal: "Notatka o nieruchomości u klienta bez aktywnych nieruchomości powinna po syncu AI utworzyć nieruchomość „Potencjalna”.",
+    pre: "Klient nowy lub bez aktywnych nieruchomości. LLM włączony, działa process_tasks.",
+    steps: [
+      "Dodaj klienta (unikalny numer telefonu).",
+      "Dodaj do klienta notatkę/update (≥20 znaków) opisującą nieruchomość na sprzedaż: typ, adres/miasto, powierzchnia, cena, liczba pokoi.",
+      "Na karcie klienta kliknij „Dodaj nieruchomość z AI” (widoczne, gdy klient jest eligible).",
+      "Uruchom / poczekaj na process_tasks aż zadanie się wykona.",
+      "Odśwież kartę klienta i sprawdź panel „Analiza AI”."
+    ],
+    expect: [
+      "Panel „Analiza AI” pokazuje wynik CREATED z czasem synchronizacji.",
+      "Powstaje nieruchomość w statusie „Potencjalna”, przypięta do klienta i agenta.",
+      "Adres, typ, powierzchnia i cena zgodne z treścią notatki; wpis w AuditLog o auto-utworzeniu z notatki."
+    ]
+  },
+  {
+    title: "AI: średnia pewność → propozycja do akceptacji",
+    goal: "Gdy AI ma umiarkowaną pewność (50–85%), zamiast nieruchomości powstaje propozycja do ręcznego zatwierdzenia.",
+    pre: "Klient z mniej jednoznaczną notatką (niepełny opis nieruchomości).",
+    steps: [
+      "Dodaj klienta z notatką opisującą nieruchomość, ale z brakami (np. bez ceny lub bez powierzchni).",
+      "Uruchom AI sync i process_tasks.",
+      "Wejdź w „Propozycje nieruchomości” (menu agenta).",
+      "Zaakceptuj propozycję dla tego klienta.",
+      "Dla innej propozycji użyj „Odrzuć”."
+    ],
+    expect: [
+      "W średnim paśmie pewności powstaje PROPOZYCJA (status PENDING), a nie nieruchomość.",
+      "Po akceptacji powstaje nieruchomość „Potencjalna”, propozycja → APPROVED z linkiem do nieruchomości.",
+      "Po odrzuceniu propozycja → REJECTED, żadna nieruchomość nie powstaje."
+    ]
+  },
+  {
+    title: "AI: brak nieruchomości w notatce / braki / nieeligible",
+    goal: "AI nie tworzy nieruchomości, gdy notatka nie opisuje nieruchomości, brakuje wymaganych danych lub klient już ma nieruchomość.",
+    pre: "Trzech klientów w różnych stanach.",
+    steps: [
+      "Klient z notatką bez nieruchomości (np. „oddzwonić w przyszłym tygodniu”) → sync AI.",
+      "Klient z notatką o nieruchomości, ale bez pól wymaganych do utworzenia → sync AI.",
+      "Klient, który już ma aktywną nieruchomość → sprawdź dostępność przycisku AI.",
+      "Odśwież karty i sprawdź panele „Analiza AI”."
+    ],
+    expect: [
+      "Notatka bez nieruchomości → outcome NO_PROPERTY, nic nie powstaje.",
+      "Braki wymaganych pól → outcome MISSING_REQUIRED, nic nie powstaje, powód widoczny.",
+      "Klient z aktywną nieruchomością jest nieeligible — przycisk „Dodaj nieruchomość z AI” niedostępny."
+    ]
+  },
+  {
+    title: "Kupujący + poszukiwanie → nieruchomość AI w kubełku „Potencjalne”",
+    goal: "Poszukiwanie kupującego obejmujące lokalizację nieruchomości AI powinno pokazać ją w „Potencjalne”.",
+    pre: "Istnieje nieruchomość „Potencjalna” (ze scenariusza 1). Znasz jej adres/typ.",
+    steps: [
+      "Dodaj drugiego klienta (kupujący).",
+      "Utwórz poszukiwanie tego samego typu co nieruchomość AI.",
+      "Ustaw obszar/promień tak, by obejmował adres nieruchomości.",
+      "Zostaw kryteria FETCHING otwarte (lub takie, które nieruchomość spełnia) — inaczej brak wartości ukryje ją.",
+      "Otwórz szczegóły poszukiwania → „Pasujące nieruchomości” → zakładka „Potencjalne”."
+    ],
+    expect: [
+      "Nieruchomość AI jest widoczna w kubełku „Potencjalne”.",
+      "Filtr ceny jest pomijany (potencjalna pokaże się nawet ponad budżet).",
+      "Zanotuj bieżący scoring nieruchomości (matched / total oraz %)."
+    ]
+  },
+  {
+    title: "Promocja „Potencjalna” → nieruchomość trafia do „Procesowane”",
+    goal: "Wciągnięcie potencjalnej nieruchomości do procesu przenosi ją z „Potencjalne” do „Procesowane”.",
+    pre: "Nieruchomość AI widoczna w „Potencjalne” (scenariusz 4).",
+    steps: [
+      "Na nieruchomości użyj „Wciągnij do procesu” (promocja z Potencjalnej).",
+      "Wybierz status docelowy (np. „Umówiono Na Pozyskanie”), podaj cenę (wymagane) i datę pozyskania.",
+      "Zapisz zmianę statusu.",
+      "Wróć do szczegółów poszukiwania i odśwież."
+    ],
+    expect: [
+      "Nieruchomość znika z „Potencjalne” i pojawia się w „Procesowane”.",
+      "Teraz działa filtr ceny — cena musi być ≤ budżet + bufor, inaczej wypadnie z dopasowań.",
+      "Promować można tylko status „Potencjalna”; cena jest wymagana."
+    ]
+  },
+  {
+    title: "Uzupełnienie pól nieruchomości podnosi scoring w „Procesowane”",
+    goal: "Wypełnienie pól odpowiadających kryteriom SCORING kupującego zwiększa wynik dopasowania.",
+    pre: "Nieruchomość w „Procesowane”; poszukiwanie ma ustawione kryteria SCORING (np. rok budowy, źródła ciepła, stan techniczny).",
+    steps: [
+      "Zanotuj bieżący scoring nieruchomości w „Procesowane”.",
+      "Edytuj nieruchomość i uzupełnij pola pokrywające się z kryteriami SCORING kupującego (rok budowy w zakresie, źródła ciepła, stan techniczny, liczba pokoi/łazienek itp.).",
+      "Zapisz nieruchomość.",
+      "Odśwież szczegóły poszukiwania i porównaj scoring."
+    ],
+    expect: [
+      "Scoring (matched/total i %) rośnie dokładnie o uzupełnione, pasujące kryteria.",
+      "Pola pozostające puste dalej dają 0 pkt dla swojego kryterium.",
+      "Kubełek się nie zmienia (dalej „Procesowane”) — scoring nie wpływa na kubełek."
+    ]
+  },
+  {
+    title: "Status dopasowania i notatki dopasowania (per-match)",
+    goal: "Agent może ustawić status dopasowania i dodać notatki na karcie dopasowania — niezależnie od kubełka.",
+    pre: "Nieruchomość widoczna w dowolnym kubełku poszukiwania.",
+    steps: [
+      "Na karcie dopasowania ustaw „Status dopasowania” = Wysłany, potem Zainteresowany.",
+      "Dodaj notatkę do dopasowania.",
+      "Odśwież i sprawdź, że status i licznik notatek się zachowały.",
+      "Ustaw inne dopasowanie na „Niezainteresowany” i sprawdź przełącznik „Pokaż niezainteresowane / nie dotyczy”."
+    ],
+    expect: [
+      "Status i notatki zapisują się (rekord dopasowania tworzony leniwie), wpis w AuditLog.",
+      "„Niezainteresowany”/„Nie dotyczy” domyślnie ukrywa dopasowanie; przełącznik je pokazuje.",
+      "Zmiana statusu dopasowania NIE zmienia kubełka (kubełek zależy od statusu nieruchomości)."
+    ]
+  },
+  {
+    title: "Pozyskanie: „Umówiono Na Pozyskanie” → „Fotograf Do Umówienia” wymusza komplet pól",
+    goal: "Podpisanie umowy przy pozyskaniu wymaga uzupełnienia wszystkich wymaganych pól nieruchomości (dla lokalu ~38 pól).",
+    pre: "Nieruchomość w statusie „Umówiono Na Pozyskanie” (kubełek „Procesowane”).",
+    steps: [
+      "Otwórz modal zmiany statusu nieruchomości.",
+      "„Czy spotkanie się odbyło?” = Tak → „Czy podpisano umowę?” = Tak.",
+      "Uzupełnij dane umowy (data podpisania, deadline, cena, typ prowizji + wartość).",
+      "Spróbuj zapisać z JEDNYM brakującym polem nieruchomości.",
+      "Uzupełnij WSZYSTKIE wymagane pola (rent, dostępność, forma własności, KW, rynek, typ budynku, liczba pięter/łazienek, rok, stan, kuchnia/AGD/łazienka, ogrzewanie, media, bezpieczeństwo…) i zapisz."
+    ],
+    expect: [
+      "Przy braku pola: błąd „uzupełnij wymagane dane nieruchomości: …”, status się NIE zmienia.",
+      "Multiselecty (kuchnia/AGD/łazienka/ogrzewanie) i selecty są wyrównane i nie rozpychają modala.",
+      "Po komplecie pól status zmienia się na „Fotograf Do Umówienia”."
+    ]
+  },
+  {
+    title: "Po pozyskaniu: nieruchomość wpada do „Pozyskane”, scoring znów rośnie",
+    goal: "Przejście do „Fotograf Do Umówienia” przenosi nieruchomość do „Pozyskane”, a pola z pozyskania podnoszą scoring.",
+    pre: "Ukończony scenariusz 8; poszukiwanie ma kryteria SCORING pokrywające pola pozyskania.",
+    steps: [
+      "Zanotuj scoring nieruchomości sprzed pozyskania (z „Procesowane”).",
+      "Odśwież szczegóły poszukiwania.",
+      "Sprawdź zakładkę „Pozyskane”.",
+      "Porównaj scoring z wartością sprzed pozyskania."
+    ],
+    expect: [
+      "Nieruchomość znika z „Procesowane” i pojawia się w „Pozyskane”.",
+      "Scoring ponownie rośnie — pola z pozyskania (rok, stan, ogrzewanie, wyposażenie) spełniły kolejne kryteria SCORING kupującego.",
+      "Dane dopasowania (status, notatki) z poprzednich kroków pozostają."
+    ]
+  },
+  {
+    title: "Dalsza ścieżka „Pozyskane”: fotograf → zdjęcia → oferta",
+    goal: "Nieruchomość przechodzi kolejne statusy pozyskane, pozostając w kubełku „Pozyskane”.",
+    pre: "Nieruchomość w statusie „Fotograf Do Umówienia”.",
+    steps: [
+      "„Fotograf Do Umówienia” → „Oczekiwanie Na Zdjęcia” (podaj datę fotografa).",
+      "Dodaj co najmniej 3 zdjęcia; spróbuj przejść dalej z mniejszą liczbą (oczekiwana blokada).",
+      "„Oczekiwanie Na Zdjęcia” → „Oferta W Przygotowaniu” (zdjęcia gotowe = Tak).",
+      "„Oferta W Przygotowaniu” → „Oferta Aktywna” (oferta gotowa = Tak).",
+      "Odśwież poszukiwanie po każdym kroku."
+    ],
+    expect: [
+      "Przejście do „Oferta W Przygotowaniu” wymaga min. 3 zdjęć — mniej = błąd.",
+      "Na każdym etapie nieruchomość pozostaje w kubełku „Pozyskane”.",
+      "Po finalizacji („Sfinalizowana”) nieruchomość wypada ze wszystkich trzech kubełków (trafia do „Archiwum”, jeśli dopasowanie było dotknięte)."
+    ]
+  },
+  {
+    title: "Geo: nieruchomość poza obszarem poszukiwania nie pasuje",
+    goal: "Dopasowanie respektuje obszar/promień poszukiwania.",
+    pre: "Nieruchomość z poprawnie zgeokodowanym adresem (lat/lon).",
+    steps: [
+      "Utwórz poszukiwanie z małym promieniem NIE obejmującym adresu nieruchomości.",
+      "Otwórz szczegóły → sprawdź kubełki.",
+      "Zwiększ promień lub ustaw obszar tak, by objąć adres.",
+      "Odśwież i sprawdź ponownie."
+    ],
+    expect: [
+      "Przy małym promieniu nieruchomość nie pojawia się w żadnym kubełku.",
+      "Po objęciu adresu nieruchomość pojawia się w odpowiednim kubełku.",
+      "Nieruchomość bez lat/lon (nieudane geokodowanie) nie pasuje do żadnego poszukiwania."
+    ]
+  },
+  {
+    title: "Restrykcyjny fetching i asymetria filtra ceny",
+    goal: "Twarde filtry FETCHING odrzucają nieruchomości z brakującą wartością (poza ceną); filtr ceny działa różnie w Potencjalne vs pozostałych.",
+    pre: "Nieruchomość i poszukiwanie tego samego typu, ta sama lokalizacja.",
+    steps: [
+      "W poszukiwaniu ustaw kryterium FETCHING (np. liczba pokoi 3–4) i sprawdź kubełek Potencjalne, gdy nieruchomość NIE ma liczby pokoi.",
+      "Uzupełnij liczbę pokoi w nieruchomości w zakresie i odśwież.",
+      "Ustaw nieruchomości cenę powyżej budżetu kupującego (o więcej niż bufor) i sprawdź kubełek Potencjalne.",
+      "Wciągnij nieruchomość do procesu (Procesowane) i odśwież."
+    ],
+    expect: [
+      "Nieruchomość bez wymaganej wartości FETCHING nie pokazuje się nawet w „Potencjalne”.",
+      "Po uzupełnieniu wartości w zakresie — pojawia się.",
+      "Cena > budżet: w „Potencjalne” widoczna (filtr ceny pomijany), ale po przejściu do „Procesowane” znika, jeśli cena > budżet + bufor."
+    ]
+  }
+];
+
+const KEY = "handshake-qa-e2e:v1";
+let state = load();
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch(e){ return {}; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); stamp(); }catch(e){} }
+function stamp(){ const el=document.getElementById('savedAt'); if(el) el.textContent = "Zapisano: " + new Date().toLocaleTimeString('pl-PL'); }
+
+const root = document.getElementById('scenarios');
+
+SCENARIOS.forEach((sc, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.i = i;
+
+  const steps = sc.steps.map((s, j) => {
+    const id = `s${i}_${j}`;
+    const checked = state[id] ? 'checked' : '';
+    return `<li data-step="${id}" class="${state[id]?'checked':''}">
+      <input type="checkbox" id="${id}" ${checked}>
+      <label for="${id}">${s}</label></li>`;
+  }).join('');
+
+  const vId = `v${i}`;
+  const v = state[vId] || '';
+  const verdicts = [['','Do zrobienia'],['pass','Zaliczony'],['fail','Błąd'],['blocked','Zablokowany']];
+  const vHtml = verdicts.map(([val,lab]) =>
+    `<label><input type="radio" name="${vId}" value="${val}" ${v===val?'checked':''}>${lab}</label>`).join('');
+
+  const nId = `n${i}`;
+  const noteVal = state[nId] ? String(state[nId]).replace(/</g,'&lt;') : '';
+
+  card.innerHTML = `
+    <div class="chead">
+      <div class="cnum">${i+1}</div>
+      <div class="ctitle">
+        <h3>${sc.title}</h3>
+        <div class="goal">${sc.goal}</div>
+      </div>
+      <div class="cmeta">
+        <span class="chip todo" data-chip>Do zrobienia</span>
+        <span class="cstepcount" data-count>0/${sc.steps.length}</span>
+      </div>
+    </div>
+    <div class="cbody">
+      <div class="sec"><div class="lab">Warunek wstępny</div><div class="pre">${sc.pre}</div></div>
+      <div class="sec"><div class="lab">Kroki</div><ul class="steps">${steps}</ul></div>
+      <div class="sec"><div class="lab">Oczekiwany rezultat</div>
+        <div class="expect"><ul>${sc.expect.map(e=>`<li>${e}</li>`).join('')}</ul></div></div>
+      <div class="sec"><div class="lab">Werdykt</div>
+        <div class="verdict">${vHtml}</div>
+        <textarea class="note" data-note="${nId}" placeholder="Notatki / uwagi / defekty…">${noteVal}</textarea>
+      </div>
+    </div>`;
+  root.appendChild(card);
+
+  // header toggles body
+  card.querySelector('.chead').addEventListener('click', (e)=>{
+    if(e.target.closest('input,label,button,textarea')) return;
+    card.classList.toggle('open');
+  });
+
+  refreshCard(card);
+});
+
+// events
+root.addEventListener('change', (e)=>{
+  const t = e.target;
+  if(t.type === 'checkbox'){
+    state[t.id] = t.checked;
+    t.closest('li').classList.toggle('checked', t.checked);
+    save(); refreshCard(t.closest('.card')); refreshTotal();
+  } else if(t.type === 'radio'){
+    state[t.name] = t.value;
+    save(); refreshCard(t.closest('.card'));
+  }
+});
+root.addEventListener('input', (e)=>{
+  if(e.target.matches('textarea.note')){
+    state[e.target.dataset.note] = e.target.value; save();
+  }
+});
+
+function refreshCard(card){
+  const boxes = [...card.querySelectorAll('ul.steps input[type=checkbox]')];
+  const done = boxes.filter(b=>b.checked).length;
+  card.querySelector('[data-count]').textContent = `${done}/${boxes.length}`;
+  const verdict = (state[`v${card.dataset.i}`]) || '';
+  const chip = card.querySelector('[data-chip]');
+  card.classList.remove('done','fail');
+  let cls='todo', txt='Do zrobienia';
+  if(verdict==='pass'){ cls='pass'; txt='Zaliczony'; card.classList.add('done'); }
+  else if(verdict==='fail'){ cls='fail'; txt='Błąd'; card.classList.add('fail'); }
+  else if(verdict==='blocked'){ cls='blocked'; txt='Zablokowany'; }
+  else if(done===boxes.length && boxes.length){ cls='pass'; txt='Kroki OK'; }
+  else if(done>0){ cls='wip'; txt='W toku'; }
+  chip.className = 'chip '+cls; chip.textContent = txt;
+}
+
+function refreshTotal(){
+  const all = [...document.querySelectorAll('ul.steps input[type=checkbox]')];
+  const done = all.filter(b=>b.checked).length;
+  document.getElementById('barFill').style.width = all.length? (100*done/all.length)+'%' : '0';
+  document.getElementById('barCount').textContent = `${done} / ${all.length}`;
+}
+
+// controls
+document.getElementById('expandAll').onclick = ()=>document.querySelectorAll('.card').forEach(c=>c.classList.add('open'));
+document.getElementById('collapseAll').onclick = ()=>document.querySelectorAll('.card').forEach(c=>c.classList.remove('open'));
+document.getElementById('resetBtn').onclick = ()=>{
+  if(confirm('Wyczyścić cały zapisany stan (checkboxy, werdykty, notatki)?')){
+    state = {}; try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  }
+};
+document.getElementById('exportBtn').onclick = ()=>{
+  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'handshake-qa-e2e-wyniki.json';
+  a.click(); URL.revokeObjectURL(a.href);
+};
+document.getElementById('importBtn').onclick = ()=>document.getElementById('importFile').click();
+document.getElementById('importFile').onchange = (e)=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{ try{ state = JSON.parse(r.result)||{}; save(); location.reload(); }
+    catch(err){ alert('Nieprawidłowy plik JSON.'); } };
+  r.readAsText(f);
+};
+
+// theme toggle
+const themeBtn = document.getElementById('themeBtn');
+themeBtn.onclick = ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : (cur==='light' ? 'dark' :
+    (matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+  document.documentElement.setAttribute('data-theme', next);
+  try{ localStorage.setItem(KEY+':theme', next); }catch(e){}
+};
+try{ const th = localStorage.getItem(KEY+':theme'); if(th) document.documentElement.setAttribute('data-theme', th); }catch(e){}
+
+// open first scenario, init totals
+document.querySelector('.card')?.classList.add('open');
+refreshTotal(); stamp();
+</script>
+</body>
+</html>
