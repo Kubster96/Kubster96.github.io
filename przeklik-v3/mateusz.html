@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Przeklik v3 — Mateusz Molczan</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-person="mateusz">
+<div class="wrap">
+  <p class="crumb"><a href="./">← Przeklik v3 — strona startowa</a></p>
+  <header class="top">
+    <h1>Przeklik CRM v3 — <span id="personName">Mateusz Molczan</span></h1>
+    <p class="sub">Zaznacz przy każdym punkcie „OK” albo „Problem”. Stan zapisuje się w tej przeglądarce.</p>
+    <div class="bar-row">
+      <div class="progress" title="Postęp: zielone OK, czerwone Problem"><span class="p-ok" id="barOk"></span><span class="p-err" id="barErr"></span></div>
+      <span class="pcount" id="barCount">0 / 0</span>
+    </div>
+  </header>
+
+  <div class="box">
+    <div class="callout">
+      <p><strong>Próba generalna działa BEZ wysyłek do klientów.</strong> E-maile i SMS-y nie wychodzą — status „nie wysłano” albo „w kolejce” to normalne, nie zgłaszaj tego jako problem.</p>
+      <p><strong>Baza próby zostanie skasowana.</strong> Widzisz kopię prawdziwych danych — nie zmieniaj prawdziwych klientów „na serio”. Pracuj na rekordach testowych, które sam założysz.</p>
+    </div>
+    <h2>Adres systemu do testów</h2>
+    <div class="urlrow">
+      <input id="appUrl" type="text" readonly value="https://handshake-crm-v3-production.up.railway.app" aria-label="Adres systemu do testów">
+      <button class="act" id="copyUrl" type="button">Kopiuj adres</button>
+    </div>
+    <p class="sub" style="margin-top:6px">Działa w czasie próby generalnej. Logujesz się kontami testowymi (Sales support, Closer, TS), które dostaniesz od Jakuba.</p>
+  </div>
+
+  <noscript><div class="callout">Ta strona wymaga włączonego JavaScriptu.</div></noscript>
+  <div id="checklist"></div>
+
+  <div class="box">
+    <h2>Gotowe?</h2>
+    <p class="sub">„Kopiuj raport” tworzy podsumowanie (wynik i lista problemów z opisami) — wklej je w wiadomość do Jakuba.</p>
+    <div class="tools">
+      <button class="act primary" id="copyReport" type="button">Kopiuj raport</button>
+      <button class="act danger" id="clearAll" type="button">Wyczyść</button>
+    </div>
+    <div id="reportBox">
+      <textarea id="reportText" readonly aria-label="Treść raportu"></textarea>
+    </div>
+  </div>
+
+  <footer>Przeklik Handshake CRM v3 · dzień D: sobota 3.10.2026, 22:00</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="checklist.js"></script>
+</body>
+</html>
