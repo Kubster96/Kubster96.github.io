@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Wspólna checklista przeklikania E2E Handshake CRM v3 — Maciej, Karol, Mateusz">
+<title>E2E CRM v3</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <p class="crumb"><a href="../">← Menu</a></p>
+
+  <header class="top">
+    <div class="top-row">
+      <h1>Przeklik E2E — Handshake CRM v3</h1>
+      <span class="sync" id="sync" role="status" aria-live="polite">Łączenie…</span>
+    </div>
+    <div class="bar-row">
+      <span class="lbl">Razem</span>
+      <div class="progress" role="progressbar" aria-label="Postęp łączny" aria-valuemin="0" aria-valuemax="100" id="totalBar"><i></i></div>
+      <span class="pcount" id="totalCount">0/0</span>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Testerzy" id="tabs"></div>
+  </header>
+
+  <div class="banner" id="banner" role="alert">
+    <span id="bannerText"><b>Brak połączenia z magazynem</b> — zmiany zapisane lokalnie i zostaną wysłane.</span>
+    <button class="act" type="button" id="retryNow">Spróbuj teraz</button>
+  </div>
+
+  <div class="callout danger">
+    <p><strong class="big">To jest PRODUKCJA v3, czyli prawdziwa baza agencji.</strong></p>
+    <ul>
+      <li>Tworzysz WYŁĄCZNIE własne rekordy, a ich nazwy zaczynasz od <strong>„TEST &lt;Twoje imię&gt;”</strong> (np. „TEST Karol Kupujący”).</li>
+      <li>Jako telefon i e-mail klienta testowego podajesz <strong>swój własny</strong> numer i adres. Nigdy wymyślonych, bo system może wysłać na nie SMS albo e-mail.</li>
+      <li><strong>Nie edytujesz, nie notujesz i nie kontaktujesz prawdziwych klientów</strong>. Cudze rekordy możesz tylko oglądać.</li>
+      <li>Nie wpisujesz prawdziwych numerów PESEL ani dowodów osobistych, także swoich. Formularz danych do umowy wysyłasz tylko na własny e-mail.</li>
+      <li>Spotkania umawiasz wyłącznie u swojego konta Closer, a nie u prawdziwego closera. Jeśli rekord testowy przejmie ktoś spoza Twoich trzech kont, zatrzymaj się i daj znać Jakubowi.</li>
+      <li>Nie dodajesz faktur ani wpływów prowizji.</li>
+    </ul>
+  </div>
+
+  <div class="box" id="intro">
+    <h2>Jak klikamy</h2>
+    <p class="sub">Każdy tester ma trzy konta i przechodzi pełną ścieżkę: Sales Support pozyskuje klienta i umawia spotkanie, Closer je odbywa i rozlicza, a Transaction Specialist przejmuje rekord. Na końcu jest obszar specjalny danej osoby.</p>
+    <div class="callout info">
+      <p id="appLine">Adres CRM v3 dostaniesz od Jakuba.</p>
+      <p>Odznaczenia i uwagi zapisują się <strong>wspólnie dla wszystkich</strong>: każdy, kto otworzy tę stronę, widzi postęp całego zespołu. Strona odświeża się co ok. 10 s.</p>
+      <p>Znalazłeś błąd? Opisz go w polu „Uwagi / znaleziony błąd” przy punkcie: co kliknąłeś, co się stało i czego się spodziewałeś. Punkt odznacz dopiero po sprawdzeniu, także wtedy, gdy wynik był błędny.</p>
+    </div>
+    <h2 id="accHead">Twoje konta</h2>
+    <div class="accounts" id="accounts"></div>
+    <p class="sub" style="margin-top:6px">Hasło przekazane osobno. Nie wpisuj go nigdzie poza ekranem logowania CRM.</p>
+    <div class="tools">
+      <label class="toggle"><input type="checkbox" id="hideDone"> Ukryj odznaczone</label>
+    </div>
+    <details class="sample">
+      <summary>Wycena testowa do wklejenia (punkt TS 05)</summary>
+      <pre id="sampleText"></pre>
+      <button class="act" type="button" id="copySample">Kopiuj wycenę testową</button>
+    </details>
+  </div>
+
+  <main id="panel" role="tabpanel"></main>
+
+  <noscript><div class="callout">Ta strona wymaga włączonego JavaScriptu.</div></noscript>
+  <footer>kubster96.github.io · Przeklik E2E CRM v3</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="scenarios.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
