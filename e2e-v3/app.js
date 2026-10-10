@@ -8,7 +8,7 @@
   'use strict';
 
   // Jedyne miejsce z adresem backendu v3 — podmień po wdrożeniu (bez ukośnika na końcu).
-  var API_URL = 'https://REPLACE-ME.example';
+  var API_URL = 'https://handshake-crm-v3-production.up.railway.app';
 
   var POLL_MS = 10000;
   var NOTE_DEBOUNCE_MS = 800;
@@ -455,6 +455,7 @@
     var head = el('div', 'box person-head');
     head.appendChild(el('h2', null, p.name + ': scenariusze'));
     head.appendChild(el('p', 'sub', 'Obszar specjalny: ' + p.focus + '.'));
+    head.appendChild(el('p', 'sub', 'Rejon Twojego konta TS: ' + p.region + '. Nieruchomości i klientów testowych zakładaj w tym województwie (np. ' + p.city + '), wtedy przekazanie trafi do Twojego TS.'));
     var row = el('div', 'bar-row');
     row.appendChild(el('span', 'lbl', p.name));
     var bar = el('div', 'progress');

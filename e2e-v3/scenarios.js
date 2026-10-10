@@ -9,9 +9,9 @@
   'use strict';
 
   var PEOPLE = [
-    { key: 'maciej', name: 'Maciej', focus: 'sprzedający, nieruchomości, umowy, wycena → symulacja' },
-    { key: 'karol', name: 'Karol', focus: 'kupujący, poszukiwania, dopasowania, link do ofert, szansa' },
-    { key: 'mateusz', name: 'Mateusz', focus: 'kalendarz i spotkania, nagrania, anty-duplikacja, przekazania, rejony' }
+    { key: 'maciej', name: 'Maciej', focus: 'sprzedający, nieruchomości, umowy, wycena → symulacja', region: 'podkarpackie', city: 'Rzeszów' },
+    { key: 'karol', name: 'Karol', focus: 'kupujący, poszukiwania, dopasowania, link do ofert, szansa', region: 'małopolskie', city: 'Kraków' },
+    { key: 'mateusz', name: 'Mateusz', focus: 'kalendarz i spotkania, nagrania, anty-duplikacja, przekazania, rejony', region: 'lubelskie', city: 'Lublin' }
   ];
 
   var ROLES = {
@@ -547,10 +547,10 @@
           acc: 'TS',
           t: 'Widoczność między rejonami',
           steps: [
-            'Ustal z Maciejem i Karolem, czyje konto TS ma INNY rejon niż Twoje (w uwagach wpisz rejony).',
+            'Weź nieruchomość TEST Macieja (podkarpackie) albo Karola (małopolskie) — Twoje konto TS ma lubelskie.',
             'Na swoim koncie TS otwórz ich nieruchomość „TEST …” (link od nich) i adres karty ich klienta-sprzedającego.'
           ],
-          ok: 'Nieruchomość z innego rejonu otwiera się w „Tryb przeglądania”. Oś czasu klienta pokazuje spokojny stan „Brak dostępu do osi czasu klienta”, bez „Spróbuj ponownie”, a nazwisko sprzedającego nie jest linkiem. Karta klienta daje „Nie znaleziono klienta”. Jeśli wszyscy macie ten sam rejon, wpisz „ten sam rejon” i odznacz.'
+          ok: 'Nieruchomość z innego rejonu otwiera się w „Tryb przeglądania”. Oś czasu klienta pokazuje spokojny stan „Brak dostępu do osi czasu klienta”, bez „Spróbuj ponownie”, a nazwisko sprzedającego nie jest linkiem. Karta klienta daje „Nie znaleziono klienta”. Rejony kont TS: Maciej — podkarpackie, Karol — małopolskie, Mateusz — lubelskie.'
         },
         {
           acc: 'SS',
